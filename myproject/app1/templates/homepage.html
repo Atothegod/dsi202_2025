@@ -1,0 +1,89 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head><title>Home</title></head>
+<body>
+    <h1>Welcome to Our Eco Shop</h1>
+    <a href="{% url 'product_list' %}">View All Products</a>
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-100 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-green-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'homepage' %}" class="text-2xl font-semibold">Treevaq</a>
+            <div>
+                <a href="{% url 'product_list' %}" class="px-4 hover:underline">Products</a>
+                <a href="#" class="px-4 hover:underline">About Us</a>
+                <a href="#" class="px-4 hover:underline">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container mx-auto py-16 text-center">
+        <h1 class="text-4xl font-semibold text-green-700">Welcome to Treevaq</h1>
+        <p class="mt-4 text-xl text-gray-600">Discover eco-friendly products for a better future.</p>
+        <a href="{% url 'product_list' %}" class="mt-8 inline-block bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700">Shop Now</a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-green-600 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Treevaq. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treevaq🌱 - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-green-800 text-white p-6 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'homepage' %}" class="text-4xl font-bold tracking-wider hover:text-green-300">Treevaq🌱</a>
+            <div class="space-x-8">
+                <a href="{% url 'product_list' %}" class="text-lg hover:text-green-300 transition-colors">Products</a>
+                <a href="#" class="text-lg hover:text-green-300 transition-colors">About Us</a>
+                <a href="#" class="text-lg hover:text-green-300 transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-green-800 text-white text-center py-24">
+        <div class="container mx-auto">
+            <h1 class="text-5xl font-semibold mb-4">Welcome to Treevaq🌱</h1>
+            <p class="text-xl mb-6">Sustainable products for a greener tomorrow</p>
+            <a href="{% url 'product_list' %}" class="bg-green-300 text-green-900 py-3 px-8 rounded-full text-xl font-semibold hover:bg-green-400 transition">Explore Products</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-green-900 text-white py-12 mt-16">
+        <div class="container mx-auto text-center">
+            <p class="text-lg">&copy; 2025 Treevaq🌱 | All Rights Reserved</p>
+        </div>
+    </footer>
+</body>
+</html>
+
