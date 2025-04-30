@@ -1,0 +1,68 @@
+
+
+# services:
+#   db:
+#     image: postgres:13
+#     restart: always
+#     environment:
+#       POSTGRES_DB: ecommerce_db
+#       POSTGRES_USER: admin
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   web:
+#     build:
+#       context: ./myproject
+#     command: python manage.py runserver 0.0.0.0:8000
+#     volumes:
+#       - ./myproject:/app
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - db
+
+# volumes:
+#   postgres_data:
+
+
+
+# services:
+#   db:
+#     image: postgres:13
+#     restart: always
+#     environment:
+#       POSTGRES_DB: ecommerce_db
+#       POSTGRES_USER: admin
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   web:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     command: sh -c "cd myproject && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - db
+
+# volumes:
+#   postgres_data:
+
+# networks:
+#   app-network:
+#     driver: bridge
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
