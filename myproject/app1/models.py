@@ -78,7 +78,3 @@ class Support(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     issue = models.TextField()
     status = models.CharField(max_length=50)
-
-class User(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=20)
