@@ -9,7 +9,8 @@ from .forms import UserRegistrationForm, UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
-
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -82,13 +83,8 @@ def signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user.backend = 'django.contrib.auth.backends.ModelBackend'  # 🛠 ระบุ backend
-            login(request, user)
-            return redirect('login')  # หรือเปลี่ยนไปหน้า home ได้เลยถ้า login สำเร็จ
-        else:
-            print(form.errors)
+            form.save()
+            return redirect('login')  # หรือเปลี่ยนเส้นทางที่ต้องการ
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
-
