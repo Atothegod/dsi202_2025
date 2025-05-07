@@ -116,7 +116,13 @@
                 <a href="{% url 'cart_view' %}" class="text-lg hover:text-green-300 transition-colors">🛒 Cart</a>
                 <a href="#" class="text-lg hover:text-green-300 transition-colors">About Us</a>
                 <a href="#" class="text-lg hover:text-green-300 transition-colors">Contact</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="text-lg hover:text-green-300 transition-colors">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-lg hover:text-green-300 transition-colors">Login</a>
+                {% endif %}
             </div>
+            
         </div>
     </nav>
 

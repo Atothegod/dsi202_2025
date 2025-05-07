@@ -139,3 +139,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+LOGIN_REDIRECT_URL = '/'  # หลังจากเข้าสู่ระบบ จะไปที่หน้า cart
+LOGOUT_REDIRECT_URL = '/'  # หลังจากออกจากระบบ จะไปที่หน้า home
+LOGIN_URL = '/login/'
