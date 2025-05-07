@@ -113,6 +113,7 @@
             <a href="{% url 'homepage' %}" class="text-4xl font-bold tracking-wider hover:text-green-300">Treevaq🌱</a>
             <div class="space-x-8">
                 <a href="{% url 'product_list' %}" class="text-lg hover:text-green-300 transition-colors">Products</a>
+                <a href="{% url 'cart_view' %}" class="text-lg hover:text-green-300 transition-colors">🛒 Cart</a>
                 <a href="#" class="text-lg hover:text-green-300 transition-colors">About Us</a>
                 <a href="#" class="text-lg hover:text-green-300 transition-colors">Contact</a>
             </div>
@@ -125,6 +126,53 @@
             <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search for products..." class="px-4 py-2 w-2/3 md:w-1/3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-400">
             <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Search</button>
         </form>
+    </section>
+
+    <!-- Promotional Banner Section -->
+    <section class="container mx-auto py-6">
+        <div class="bg-green-700 text-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <span class="text-4xl font-bold">Eco Deals 🌱</span>
+                <span class="text-xl">Get Up to 30% Off + Free Shipping on Orders Over $50!</span>
+            </div>
+            <a href="#" class="mt-4 md:mt-0 px-6 py-2 bg-white text-green-500 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Feature Icons Section -->
+    <section class="container mx-auto py-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
+            <!-- Feature 1 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">🔌</div>
+                <span class="mt-2 text-sm font-medium text-green-900">อิเล็กทรอนิกส์</span>
+            </div>
+            <!-- Feature 2 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">🛒</div>
+                <span class="mt-2 text-sm font-medium text-green-900">ซูเปอร์มาร์เก็ต</span>
+            </div>
+            <!-- Feature 3 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">🏭</div>
+                <span class="mt-2 text-sm font-medium text-green-900">ช้อปปิ้งโรงงาน</span>
+            </div>
+            <!-- Feature 4 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">👍</div>
+                <span class="mt-2 text-sm font-medium text-green-900">ช้อปปิ้งถูกชัวร์</span>
+            </div>
+            <!-- Feature 5 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">💊</div>
+                <span class="mt-2 text-sm font-medium text-green-900">ช้อปยาป้ายยา</span>
+            </div>
+            <!-- Feature 6 -->
+            <div class="flex flex-col items-center">
+                <div class="text-green-700 text-4xl">🚚</div>
+                <span class="mt-2 text-sm font-medium text-green-900">ส่งฟรีทั่วแอป</span>
+            </div>
+        </div>
     </section>
 
     <!-- Product Grid Section -->
@@ -150,9 +198,8 @@
     <!-- Footer -->
     <footer class="bg-green-900 text-white py-12 mt-16">
         <div class="container mx-auto text-center">
-            <p class="text-lg">&copy; 2025 Treevaq🌱 | All Rights Reserved</p>
+            <p class="text-lg">© 2025 Treevaq🌱 | All Rights Reserved</p>
         </div>
     </footer>
 </body>
 </html>
-
