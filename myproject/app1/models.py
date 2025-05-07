@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
@@ -15,11 +14,6 @@ class Analytic(models.Model):
 class CarbonFootprint(models.Model):
     product = models.CharField(max_length=255)
     footprint = models.FloatField()
-
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.CharField(max_length=255)
-    quantity = models.IntegerField()
 
 class Chat(models.Model):
     sender = models.ForeignKey(User, related_name="sent_messages", on_delete=models.CASCADE)
@@ -49,6 +43,15 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class Cart(models.Model):
+    from .models import Product
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  # เชื่อมโยงกับ User
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # เชื่อมโยงกับ Product
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity} pcs"
 
 class Recommendation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
