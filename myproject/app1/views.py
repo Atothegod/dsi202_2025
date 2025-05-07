@@ -5,6 +5,11 @@ from django.views.generic import ListView, DetailView
 from .models import Product, Cart
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from .forms import UserRegistrationForm
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.views import LoginView
+
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -55,3 +60,30 @@ def remove_from_cart(request, cart_item_id):
     cart_item = get_object_or_404(Cart, id=cart_item_id, user=request.user)
     cart_item.delete()
     return redirect('cart_view')
+
+
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+    
+    
+
+    def form_valid(self, form):
+        user = form.get_user()  # Get the logged-in user
+        login(self.request, user)  # Log the user in
+        
+        # Get 'next' URL from POST data or fallback to home
+        next_url = self.request.POST.get('next', '/')
+        print(f"Redirecting to: {next_url}")  # Print next URL to check in the console
+
+        return redirect(next_url)
+    
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # หรือเปลี่ยนเส้นทางที่ต้องการ
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'signup.html', {'form': form})
