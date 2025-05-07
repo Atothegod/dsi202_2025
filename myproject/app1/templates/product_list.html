@@ -119,6 +119,7 @@
                 {% if user.is_authenticated %}
                     <a href="{% url 'logout' %}" class="text-lg hover:text-green-300 transition-colors">Logout</a>
                 {% else %}
+                    <a href="{% url 'sign_up' %}" class="text-lg hover:text-green-300 transition-colors">Sign Up</a>
                     <a href="{% url 'login' %}" class="text-lg hover:text-green-300 transition-colors">Login</a>
                 {% endif %}
             </div>
