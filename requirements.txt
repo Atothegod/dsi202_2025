@@ -2,3 +2,5 @@ django==4.0
 djangorestframework==3.13.1
 psycopg2-binary==2.9.3
 pillow
+python-dotenv
+social-auth-app-django>=5.0.0
