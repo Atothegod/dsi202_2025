@@ -1,0 +1,26 @@
+.google-signin-btn {
+    display: inline-flex; /* เปลี่ยนจาก flex เป็น inline-flex เพื่อไม่ให้เต็มบล็อก */
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px; /* ลดขนาด padding */
+    border-radius: 8px; /* ลดความโค้ง */
+    background: #4285F4;
+    color: white;
+    font-size: 14px; /* ลดขนาดตัวอักษร */
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: auto; /* ไม่ให้กินความกว้างเต็มหน้าจอ */
+    margin: 0 auto;
+}
+
+.google-signin-btn:hover {
+    background: #357ae8;
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}

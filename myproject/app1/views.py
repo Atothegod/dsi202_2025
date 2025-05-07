@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 from .models import Product, Cart
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
@@ -80,10 +80,15 @@ class CustomLoginView(LoginView):
     
 def signup_view(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # หรือเปลี่ยนเส้นทางที่ต้องการ
+            user = form.save()
+            user.backend = 'django.contrib.auth.backends.ModelBackend'  # 🛠 ระบุ backend
+            login(request, user)
+            return redirect('login')  # หรือเปลี่ยนไปหน้า home ได้เลยถ้า login สำเร็จ
+        else:
+            print(form.errors)
     else:
-        form = UserRegistrationForm()
+        form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
