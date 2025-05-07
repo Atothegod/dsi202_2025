@@ -9,7 +9,8 @@ from .forms import UserRegistrationForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
-
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -80,10 +81,13 @@ class CustomLoginView(LoginView):
     
 def signup_view(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # หรือเปลี่ยนเส้นทางที่ต้องการ
+            user = form.save()
+            login(request, user)
+            return redirect('login')
+        else:
+            print(form.errors)  # 👉 ดูว่ามี error อะไร
     else:
-        form = UserRegistrationForm()
+        form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
