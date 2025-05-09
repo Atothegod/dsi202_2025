@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from .models import Cart, Order, Shipping, Payment, Product
@@ -45,17 +45,33 @@ def cart_view(request):
 
 
 @login_required
+def get_cart_count(request):
+    """
+    API endpoint สำหรับดึงข้อมูลจำนวนสินค้าในตะกร้า
+    """
+    # นับจำนวนสินค้าทั้งหมดในตะกร้า (รวมปริมาณของแต่ละรายการ)
+    cart_items = Cart.objects.filter(user=request.user)
+    total_items = sum(item.quantity for item in cart_items)
+    
+    return JsonResponse({'cart_count': total_items})
+
+@login_required
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, id=product_id)
         quantity = int(request.POST.get('quantity', 1))
+
+        # เช็คว่าในตะกร้ามีสินค้านี้อยู่หรือไม่ ถ้ามีเพิ่มจำนวน ถ้าไม่มีก็เพิ่มใหม่
         cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
         if not created:
             cart_item.quantity += quantity
         else:
             cart_item.quantity = quantity
         cart_item.save()
-        return redirect('cart_view')
+
+        cart_items = Cart.objects.filter(user=request.user)
+        total_items = sum(item.quantity for item in cart_items)
+        return JsonResponse({'total_items': total_items})
 
 @login_required
 def remove_from_cart(request, cart_item_id):
