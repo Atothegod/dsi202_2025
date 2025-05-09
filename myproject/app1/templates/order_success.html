@@ -1,0 +1,21 @@
+<!-- templates/order_success.html -->
+<h2>Order Success</h2>
+
+<p>Thank you for your order! Your order has been successfully placed.</p>
+
+<h3>Order Summary</h3>
+<ul>
+    {% for item in cart_items %}
+        <li>{{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }}</li>
+    {% endfor %}
+</ul>
+
+<p>Total Price: {{ total_price }}</p>
+
+<p>Your order will be shipped to:</p>
+<p>{{ shipping_info.full_name }}</p>
+<p>{{ shipping_info.address }}</p>
+<p>{{ shipping_info.phone_number }}</p>
+
+<a href="{% url 'product_list' %}">กลับไปที่หน้าสินค้า</a>
+

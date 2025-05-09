@@ -1,0 +1,81 @@
+<!-- templates/checkout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Treevaq</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="bg-black text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-semibold">Treevaq</a>
+            <div class="space-x-4">
+                <a href="/cart" class="hover:text-yellow-400">Cart</a>
+                <a href="/about" class="hover:text-yellow-400">About</a>
+                <a href="/contact" class="hover:text-yellow-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Form -->
+    <div class="container mx-auto p-8 bg-white shadow-md mt-10 rounded-lg">
+        <h2 class="text-3xl font-semibold text-center mb-6 text-yellow-500">Checkout</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="space-y-6">
+
+                <!-- Shipping Info -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700">Shipping Information</h3>
+                    <label for="full_name" class="block text-sm font-medium text-gray-600">Full Name:</label>
+                    <input type="text" name="full_name" id="full_name" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your full name">
+
+                    <label for="address" class="block text-sm font-medium text-gray-600 mt-4">Address:</label>
+                    <textarea name="address" id="address" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your shipping address"></textarea>
+
+                    <label for="phone_number" class="block text-sm font-medium text-gray-600 mt-4">Phone Number:</label>
+                    <input type="text" name="phone_number" id="phone_number" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your phone number">
+                </div>
+
+                <!-- Cart Summary -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700">Cart Summary</h3>
+                    <ul class="space-y-4 mt-4">
+                        {% for item in cart_items %}
+                            <li class="flex justify-between text-gray-600">
+                                <span>{{ item.product.name }}</span>
+                                <span>{{ item.quantity }} x ฿{{ item.product.price }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <p class="mt-6 text-xl font-semibold text-gray-800">Total: ฿{{ total_price }}</p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-6 text-center">
+                    <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white text-center py-4 mt-12">
+        © 2025 Treevaq. All Rights Reserved.
+    </footer>
+
+</body>
+</html>

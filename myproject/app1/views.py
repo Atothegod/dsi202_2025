@@ -2,7 +2,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
-from .models import Product, Cart
+from .models import Cart, Order, Shipping, Payment, Product
+from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserCreationForm
@@ -88,3 +89,49 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+@login_required
+@transaction.atomic
+def checkout_view(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    if request.method == 'POST':
+        full_name = request.POST['full_name']
+        address = request.POST['address']
+        phone_number = request.POST['phone_number']
+
+        # 1. สร้างคำสั่งซื้อ
+        order = Order.objects.create(
+            user=request.user,
+            status='Pending',
+            total_price=total_price
+        )
+
+        # 2. เพิ่มที่อยู่จัดส่ง
+        Shipping.objects.create(
+            order=order,
+            full_name=full_name,
+            address=address,
+            phone_number=phone_number
+        )
+
+        # 3. เพิ่มการชำระเงินแบบ mock (คุณสามารถเปลี่ยนเป็นระบบจริงได้ภายหลัง)
+        Payment.objects.create(
+            order=order,
+            method='COD',  # Cash on Delivery
+            status='Pending'
+        )
+
+        # 4. ล้างตะกร้า
+        cart_items.delete()
+
+        return redirect('order_success')  # ไปหน้า success หลังสั่งซื้อ
+
+    return render(request, 'checkout.html', {
+        'cart_items': cart_items,
+        'total_price': total_price
+    })
+    
+def order_success(request):
+    return render(request, 'order_success.html')
