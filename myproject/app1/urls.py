@@ -15,4 +15,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', views.signup_view, name='sign_up'),
     path('auth/', include('social_django.urls', namespace='social')),
+    path('checkout/', views.checkout_view, name='checkout'),
+    path('order_success/', views.order_success, name='order_success'),
 ]

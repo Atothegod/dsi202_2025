@@ -72,10 +72,17 @@ class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     store_name = models.CharField(max_length=255)
 
+# เพิ่มใน models.py (ถ้ายังไม่มี)
 class Shipping(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    tracking_number = models.CharField(max_length=50)
+    full_name = models.CharField(max_length=100, default='Unknown')
+    address = models.TextField()
+    phone_number = models.CharField(max_length=20, default='N/A')
+    tracking_number = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return f"Shipping for Order {self.order.id}"
+
 
 class Support(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

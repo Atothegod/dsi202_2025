@@ -35,6 +35,11 @@
                 </li>
                 {% endfor %}
             </ul>
+
+            <div class="mt-6 flex justify-between items-center">
+                <span class="text-xl font-semibold text-green-900">Total: ${{ total_price|floatformat:2 }}</span>
+                <a href="{% url 'checkout' %}" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Proceed to Checkout</a>
+            </div>
         {% else %}
             <p class="text-green-700">Your cart is empty.</p>
         {% endif %}
