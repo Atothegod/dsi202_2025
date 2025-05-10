@@ -12,6 +12,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -55,13 +56,14 @@ def get_cart_count(request):
     
     return JsonResponse({'cart_count': total_items})
 
-@login_required
 def add_to_cart(request, product_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'redirect_url': reverse('login')}, status=401)
+
     if request.method == 'POST':
         product = get_object_or_404(Product, id=product_id)
         quantity = int(request.POST.get('quantity', 1))
 
-        # เช็คว่าในตะกร้ามีสินค้านี้อยู่หรือไม่ ถ้ามีเพิ่มจำนวน ถ้าไม่มีก็เพิ่มใหม่
         cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
         if not created:
             cart_item.quantity += quantity
@@ -150,4 +152,14 @@ def checkout_view(request):
     })
     
 def order_success(request):
-    return render(request, 'order_success.html')
+    # ดึงข้อมูลคำสั่งซื้อที่สำเร็จล่าสุดของผู้ใช้
+    order = Order.objects.filter(user=request.user).latest('id')
+    # ดึงข้อมูลการจัดส่งที่เชื่อมโยงกับคำสั่งซื้อ
+    shipping_info = Shipping.objects.get(order=order)
+    
+    # ส่งข้อมูลไปยัง template
+    return render(request, 'order_success.html', {
+        'shipping_info': shipping_info,
+        'cart_items': Cart.objects.filter(user=request.user),
+        'total_price': sum(item.product.price * item.quantity for item in Cart.objects.filter(user=request.user))
+    })
