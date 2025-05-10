@@ -58,12 +58,12 @@ Treevaq เป็นระบบซื้อขายออนไลน์ที
 ###  คำสั่งติดตั้งและรันระบบ
 
 ```bash
-# 1 git clone 
+#step 1
 git clone https://github.com/Atothegod/dsi202_2025.git
 cd dsi202_2025
 
-# 2
+#step 2
 docker-compose up
 
-# 3
+#step 3
 http://localhost:8000
