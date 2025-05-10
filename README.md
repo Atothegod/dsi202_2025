@@ -52,8 +52,8 @@ Treevaq เป็นระบบซื้อขายออนไลน์ที
 ## 3.4 การติดตั้งและใช้งาน (Installation & Usage)
 
 ###  ข้อกำหนดเบื้องต้น
-- ติดตั้ง Docker และ Docker Compose
-- ควรมี Python 3.10+ และ Git (สำหรับนักพัฒนา)
+- ติดตั้ง Docker for desktop
+- Python 3.10+ และ Git
 
 ###  คำสั่งติดตั้งและรันระบบ
 
