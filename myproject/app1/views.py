@@ -139,6 +139,16 @@ def checkout_view(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
+    # เก็บข้อมูลตะกร้าใน session ก่อนลบ
+    cart_data = [{
+        'product_name': item.product.name,
+        'quantity': item.quantity,
+        'price': float(item.product.price)  # แปลง Decimal เป็น float
+    } for item in cart_items]
+    
+    # เก็บข้อมูลลงใน session
+    request.session['cart_data'] = cart_data
+
     if request.method == 'POST':
         full_name = request.POST['full_name']
         address = request.POST['address']
@@ -175,16 +185,20 @@ def checkout_view(request):
         'cart_items': cart_items,
         'total_price': total_price
     })
-    
+
 def order_success(request):
     # ดึงข้อมูลคำสั่งซื้อที่สำเร็จล่าสุดของผู้ใช้
     order = Order.objects.filter(user=request.user).latest('id')
+    
     # ดึงข้อมูลการจัดส่งที่เชื่อมโยงกับคำสั่งซื้อ
     shipping_info = Shipping.objects.get(order=order)
-    
+
+    # ดึงข้อมูลตะกร้าจาก session
+    cart_items_from_session = request.session.get('cart_data', [])
+
     # ส่งข้อมูลไปยัง template
     return render(request, 'order_success.html', {
         'shipping_info': shipping_info,
-        'cart_items': Cart.objects.filter(user=request.user),
-        'total_price': sum(item.product.price * item.quantity for item in Cart.objects.filter(user=request.user))
+        'cart_items': cart_items_from_session,  # แสดงข้อมูลจาก session
+        'total_price': order.total_price  # ใช้ราคาที่เก็บในคำสั่งซื้อ
     })

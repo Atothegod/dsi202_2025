@@ -37,13 +37,14 @@
             <ul class="space-y-2 bg-green-50 p-4 rounded-lg border border-green-200">
                 {% for item in cart_items %}
                     <li class="flex justify-between">
-                        <span>{{ item.product.name }}</span>
-                        <span>{{ item.quantity }} x ฿{{ item.product.price }}</span>
+                        <span>{{ item.product_name }}</span>  <!-- ใช้ product_name จาก session -->
+                        <span>{{ item.quantity }} x ฿{{ item.price }}</span>  <!-- ใช้ price จาก session -->
                     </li>
                 {% endfor %}
             </ul>
             <p class="mt-4 text-xl font-semibold text-gray-800 border-t pt-4">Total: ฿{{ total_price }}</p>
         </div>
+
 
         <!-- Shipping Info -->
         <div class="mt-10">
