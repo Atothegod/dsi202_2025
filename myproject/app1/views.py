@@ -2,7 +2,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
-from .models import Cart, Order, Shipping, Payment, Product
+from .models import Cart, Order, Shipping, Payment, Product, Seller
 from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -13,6 +13,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from .forms import ProductForm
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -36,6 +37,30 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
+
+
+@login_required
+def add_product_view(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            
+            # ✅ แก้ตรงนี้ให้ดึง Seller ที่ผูกกับ User
+            try:
+                seller = Seller.objects.get(user=request.user)
+                product.seller = seller
+            except Seller.DoesNotExist:
+                # ถ้ายังไม่มี Seller ให้แจ้ง error หรือ redirect ไปสร้างก่อน
+                return render(request, 'error.html', {
+                    'message': 'คุณยังไม่ได้ลงทะเบียนเป็นผู้ขาย กรุณาติดต่อแอดมินหรือลงทะเบียนก่อน'
+                })
+
+            product.save()
+            return redirect('product_detail', pk=product.pk)
+    else:
+        form = ProductForm()
+    return render(request, 'add_product.html', {'form': form})
     
     
 @login_required
