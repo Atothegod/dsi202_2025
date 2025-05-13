@@ -1,53 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Your Cart - Treevaq🌱</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-green-50 font-sans antialiased">
+{% extends 'base.html' %}
 
-    <nav class="bg-green-900 text-white p-6 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-4xl font-bold tracking-wider hover:text-green-300">Treevaq🌱</a>
-            <div class="space-x-8">
-                <a href="{% url 'product_list' %}" class="hover:text-green-300">Products</a>
-                <a href="#" class="hover:text-green-300">About Us</a>
-                <a href="#" class="hover:text-green-300">Contact</a>
-            </div>
+{% block title %}Your Cart - Treevaq🌱{% endblock %}
+
+{% block content %}
+<!-- Cart Content -->
+<section class="py-16 px-6">
+    <h1 class="text-3xl font-bold text-green-900 mb-8">🛒 Your Cart</h1>
+
+    {% if carts %}
+        <ul class="space-y-6">
+            {% for cart_item in carts %}
+            <li class="p-4 border border-green-200 rounded shadow-sm bg-white">
+                <div class="flex justify-between items-center">
+                    <span>{{ cart_item.product.name }} (x{{ cart_item.quantity }})</span>
+                    <span>${{ cart_item.product.price|floatformat:2 }}</span>
+                </div>
+                <div class="mt-2">
+                    <a href="{% url 'remove_from_cart' cart_item.id %}" class="text-red-600 hover:text-red-800">Remove</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-6 flex justify-between items-center">
+            <span class="text-xl font-semibold text-green-900">Total: ${{ total_price|floatformat:2 }}</span>
+            <a href="{% url 'checkout' %}" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Proceed to Checkout</a>
         </div>
-    </nav>
-
-    <main class="container mx-auto py-12 px-6">
-        <h1 class="text-3xl font-bold text-green-900 mb-8">🛒 Your Cart</h1>
-
-        {% if carts %}
-            <ul class="space-y-6">
-                {% for cart_item in carts %}
-                <li class="p-4 border rounded shadow-sm bg-white">
-                    <div class="flex justify-between items-center">
-                        <span>{{ cart_item.product.name }} (x{{ cart_item.quantity }})</span>
-                        <span>${{ cart_item.product.price|floatformat:2 }}</span>
-                    </div>
-                    <div class="mt-2">
-                        <a href="{% url 'remove_from_cart' cart_item.id %}" class="text-red-600 hover:text-red-800">Remove</a>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-
-            <div class="mt-6 flex justify-between items-center">
-                <span class="text-xl font-semibold text-green-900">Total: ${{ total_price|floatformat:2 }}</span>
-                <a href="{% url 'checkout' %}" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Proceed to Checkout</a>
-            </div>
-        {% else %}
-            <p class="text-green-700">Your cart is empty.</p>
-        {% endif %}
-    </main>
-
-    <footer class="bg-green-900 text-white py-8 mt-16 text-center">
-        &copy; 2025 Treevaq🌱 | All Rights Reserved
-    </footer>
-
-</body>
-</html>
+    {% else %}
+        <p class="text-green-700">Your cart is empty.</p>
+    {% endif %}
+</section>
+{% endblock %}

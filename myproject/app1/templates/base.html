@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Treevaq🌱{% endblock %}</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #263238, #004d40); /* สีน้ำเงินเข้ม-เขียวเข้ม */
+      color: #E0F2F1; /* สีขาวอมเขียว */
+    }
+
+    .glass {
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+    }
+
+    .gradient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -10;
+      background: radial-gradient(circle at 30% 30%, #4e342e, #00695c, #263238);
+      opacity: 0.4;
+      filter: blur(90px);
+    }
+
+    .header {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col text-gray-100 bg-gradient-to-br from-[#263238] to-[#004d40]">
+  <!-- Glow -->
+  <div class="gradient-bg"></div>
+
+  <!-- Navigation -->
+  <nav class="glass sticky top-0 z-50 shadow-lg py-4 px-6">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="{% url 'homepage' %}" class="text-3xl font-bold text-emerald-300 hover:text-white transition tracking-wider">
+        Treevaq🌱
+      </a>
+      <div class="hidden md:flex space-x-6 text-md font-medium">
+        <a href="{% url 'product_list' %}" class="hover:text-white transition">Products</a>
+        <a href="#" class="hover:text-white transition">About</a>
+        <a href="#" class="hover:text-white transition">Contact</a>
+        <a href="{% url 'cart_view' %}" class="relative hover:text-white transition">
+          🛒 <span id="cart-count" class="absolute -top-2 -right-3 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full">{{ cart_count|default:'0' }}</span>
+        </a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'add_product' %}" class="hover:text-white transition">+ Add Product</a>
+          <form method="POST" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="hover:text-red-400 transition">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'sign_up' %}" class="hover:text-white transition">Sign Up</a>
+          <a href="{% url 'login' %}" class="hover:text-white transition">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 py-16">
+    {% block content %}
+    <div class="text-center space-y-6">
+      <h1 class="text-4xl md:text-5xl font-serif font-bold text-white">Welcome to Your Eco-Luxury Haven 🌴</h1>
+      <p class="text-lg max-w-xl mx-auto text-gray-200">Premium plant-based lifestyle products delivered with love from our digital island.</p>
+      <a href="{% url 'product_list' %}" class="inline-block bg-black text-white text-lg font-semibold px-6 py-3 rounded-full hover:bg-gray-900 transition shadow-md hover:shadow-lg">
+        Explore Our Garden
+      </a>
+    </div>
+    {% endblock %}
+  </main>
+
+  <!-- Black Highlight Section -->
+  <section class="bg-black text-white py-20">
+    <div class="container mx-auto text-center space-y-6">
+      <h2 class="text-3xl md:text-5xl font-bold font-serif tracking-wide">Trusted by 10,000+ eco-lovers</h2>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto">
+        “Treevaq changed how I live with nature. It's tech meets harmony.” — 🌿 Maui Resident
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white py-12">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+      <p class="text-center md:text-left text-lg font-serif">© 2025 Treevaq🌱 — Rooted in Innovation</p>
+      <div class="space-x-4 text-sm">
+        <a href="#" class="hover:underline hover:text-emerald-300">Privacy</a>
+        <a href="#" class="hover:underline hover:text-emerald-300">Terms</a>
+        <a href="#" class="hover:underline hover:text-emerald-300">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AJAX for Cart -->
+  <script>
+    $(document).ready(function () {
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+      $.ajaxSetup({ headers: { "X-CSRFToken": csrftoken } });
+
+      function updateCartCount() {
+        $.ajax({
+          url: '{% url "get_cart_count" %}',
+          method: 'GET',
+          success: function (response) {
+            if (response.cart_count !== undefined) {
+              $('#cart-count').text(response.cart_count);
+            }
+          }
+        });
+      }
+
+      updateCartCount();
+    });
+  </script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

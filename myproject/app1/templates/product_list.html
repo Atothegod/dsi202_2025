@@ -1,120 +1,76 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Treevaq - Product List</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+{% extends 'base.html' %}
 
-    <!-- Navigation -->
-    <nav class="bg-gray-950 text-white p-6 shadow-md shadow-yellow-500/20">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="{% url 'homepage' %}" class="text-4xl font-bold tracking-wider text-yellow-400 hover:text-yellow-500">Treevaq</a>
-                <div class="space-x-6">
-                    <a href="{% url 'product_list' %}" class="hover:text-yellow-400">Products</a>
-                    <a href="{% url 'cart_view' %}" class="hover:text-yellow-400">🛒 Cart</a>
-                    <a href="#" class="hover:text-yellow-400">About Us</a>
-                    <a href="#" class="hover:text-yellow-400">Contact</a>
+{% block title %}Treevaq🌱 - Shop Botanical Products{% endblock %}
 
-                    {% if user.is_authenticated %}
-                        <!-- Add Product -->
-                        <a href="{% url 'add_product' %}" class="hover:text-yellow-400 font-semibold text-yellow-300">+ Add Product</a>
+{% block content %}
+<!-- Search Bar -->
+<section class="py-12">
+    <form method="GET" action="{% url 'product_list' %}" class="flex justify-center space-x-4">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search for products..." 
+               class="px-4 py-3 w-3/4 md:w-1/3 rounded-lg bg-[#f0fdf4] text-green-900 border border-green-300 focus:ring-2 focus:ring-emerald-500 placeholder-emerald-400 shadow-md" />
+        <button type="submit" 
+                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400">
+            Search
+        </button>
+    </form>
+</section>
 
-                        <!-- Logout Form -->
-                        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" style="background: none; border: none; color: #facc15; cursor: pointer;">
-                                Logout
-                            </button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'sign_up' %}" class="hover:text-yellow-400">Sign Up</a>
-                        <a href="{% url 'login' %}" class="hover:text-yellow-400">Login</a>
-                    {% endif %}
-                </div>
-
+<!-- Promo Banner -->
+<section class="py-8">
+    <div class="glass bg-gradient-to-r from-emerald-800 to-emerald-700 text-white rounded-xl shadow-2xl p-8 flex flex-col md:flex-row items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <span class="text-3xl font-extrabold tracking-wide">🌿 Eco Deals</span>
+            <span class="text-lg text-emerald-100">Save up to 30% + Free Global Shipping!</span>
         </div>
-    </nav>
+        <a href="{% url 'product_list' %}" class="mt-6 md:mt-0 px-8 py-3 bg-black text-white rounded-full font-semibold hover:bg-gray-900 transition-all hover:scale-105">
+            Shop Now
+        </a>
+    </div>
+</section>
 
-    <!-- Search Bar -->
-    <section class="container mx-auto py-8">
-        <form method="GET" action="{% url 'product_list' %}" class="flex justify-center space-x-4">
-            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search for products..." 
-                   class="px-4 py-2 w-2/3 md:w-1/3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 placeholder-gray-400" />
-            <button type="submit" 
-                    class="px-6 py-2 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-600 font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                Search
-            </button>
-        </form>
-    </section>
-
-    <!-- Promo Banner -->
-    <section class="container mx-auto py-6">
-        <div class="bg-gray-800 text-yellow-400 rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <span class="text-3xl font-bold">Eco Deals 🌿</span>
-                <span class="text-lg">Save up to 30% + Free Shipping!</span>
-            </div>
-            <a href="#" class="mt-4 md:mt-0 px-6 py-2 bg-yellow-500 text-gray-900 rounded-lg font-semibold hover:bg-yellow-600 transition-all duration-300 ease-in-out transform hover:scale-105">
-                Shop Now
-            </a>
+<!-- Feature Icons -->
+<section class="py-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div class="text-4xl text-emerald-400 mb-2">📦</div>
+            <p class="text-white font-medium">General</p>
         </div>
-    </section>
-
-    <!-- Feature Icons -->
-    <section class="container mx-auto py-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
-            <div class="flex flex-col items-center">
-                <div class="text-yellow-400 text-4xl">📦</div>
-                <span class="mt-2 text-sm font-medium text-gray-300">General</span>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <div class="text-yellow-400 text-4xl">🧴</div>
-                <span class="mt-2 text-sm font-medium text-gray-300">SkinCare</span>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <div class="text-yellow-400 text-4xl">🍎</div>
-                <span class="mt-2 text-sm font-medium text-gray-300">Supermarket</span>
-            </div>
-            <div class="flex flex-col items-center">
-                <div class="text-yellow-400 text-4xl">🚚</div>
-                <span class="mt-2 text-sm font-medium text-gray-300">Free Delivery</span>
-            </div>
-
+        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div class="text-4xl text-emerald-400 mb-2">🧴</div>
+            <p class="text-white font-medium">SkinCare</p>
         </div>
-    </section>
+        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div class="text-4xl text-emerald-400 mb-2">🍎</div>
+            <p class="text-white font-medium">Supermarket</p>
+        </div>
+        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
+            <div class="text-4xl text-emerald-400 mb-2">🚚</div>
+            <p class="text-white font-medium">Free Delivery</p>
+        </div>
+    </div>
+</section>
 
-    <!-- Product Grid -->
-    <section class="container mx-auto py-16 px-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {% for product in products %}
-                <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-contain bg-gray-700">
-                    <div class="p-6">
-                        <h2 class="text-xl font-bold text-white">{{ product.name }}</h2>
-                        <p class="text-gray-400 mt-2">{{ product.description|slice:":100" }}...</p>
-                        <p class="text-yellow-400 font-medium mt-2">Eco Score: {{ product.eco_score }}</p>
-                        <div class="flex justify-between items-center mt-4">
-                            <span class="text-lg font-semibold text-white">${{ product.price }}</span>
-                            <a href="{% url 'product_detail' product.id %}" class="text-yellow-400 hover:text-yellow-500 transition-colors">
-                                View Details
-                            </a>
-                        </div>
+<!-- Product Grid -->
+<section class="py-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {% for product in products %}
+            <div class="glass bg-gradient-to-br from-[#0f1f1c] to-[#132623] shadow-xl rounded-2xl overflow-hidden transform transition duration-300 hover:scale-[1.03] hover:shadow-2xl">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-white">{{ product.name }}</h2>
+                    <p class="text-emerald-200 mt-2">{{ product.description|slice:":100" }}...</p>
+                    <p class="text-emerald-400 font-medium mt-2">Eco Score: {{ product.eco_score }}</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-semibold text-white">${{ product.price }}</span>
+                        <a href="{% url 'product_detail' product.id %}" class="text-emerald-300 hover:text-emerald-200 transition-colors">
+                            View →
+                        </a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-950 text-gray-400 py-12 mt-16">
-        <div class="container mx-auto text-center">
-            <p class="text-lg">© 2025 Treevaq🌱 | All Rights Reserved</p>
-        </div>
-    </footer>
-</body>
-</html>
+            </div>
+        {% empty %}
+            <p class="col-span-3 text-center text-gray-400">No products found. Try another keyword.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
