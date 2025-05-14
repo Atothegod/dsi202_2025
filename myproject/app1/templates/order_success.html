@@ -3,48 +3,53 @@
 {% block title %}Order Success - Treevaq🌱{% endblock %}
 
 {% block content %}
-<!-- Success Message -->
-<section class="py-16 px-6">
-    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <div class="text-center">
-            <svg class="mx-auto mb-4 w-16 h-16 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <h2 class="text-3xl font-bold text-green-900 mb-2">Order Placed Successfully!</h2>
-            <p class="text-lg text-green-700">Thank you for your order. We’re getting it ready for you!</p>
-        </div>
+<section class="py-20 px-6">
+  <div class="max-w-3xl mx-auto bg-white/90 backdrop-blur-md p-10 rounded-2xl shadow-2xl">
 
-        <!-- Order Summary -->
-        <div class="mt-10">
-            <h3 class="text-2xl font-semibold text-green-900 mb-4">🧾 Order Summary</h3>
-            <ul class="space-y-2 bg-green-50 p-4 rounded-lg border border-green-200">
-                {% for item in cart_items %}
-                    <li class="flex justify-between text-green-700">
-                        <span>{{ item.product_name }}</span>
-                        <span>{{ item.quantity }} x ${{ item.price|floatformat:2 }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-            <p class="mt-4 text-xl font-semibold text-green-900 border-t pt-4">Total: ${{ total_price|floatformat:2 }}</p>
-        </div>
-
-        <!-- Shipping Info -->
-        <div class="mt-10">
-            <h3 class="text-2xl font-semibold text-green-900 mb-4">📦 Shipping To</h3>
-            <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-green-700 space-y-1">
-                <p><strong>Name:</strong> {{ shipping_info.full_name }}</p>
-                <p><strong>Address:</strong> {{ shipping_info.address }}</p>
-                <p><strong>Phone:</strong> {{ shipping_info.phone_number }}</p>
-            </div>
-        </div>
-
-        <!-- Return Link -->
-        <div class="text-center mt-12">
-            <a href="{% url 'product_list' %}" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition shadow-md">
-                Continue Shopping
-            </a>
-        </div>
+    <!-- Success Icon & Message -->
+    <div class="text-center">
+      <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-emerald-100">
+        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-bold text-emerald-900 mb-2">Order Placed Successfully!</h2>
+      <p class="text-lg text-emerald-700">Thank you for your order. We’re getting it ready for you! 🌱</p>
     </div>
+
+    <!-- Order Summary -->
+    <div class="mt-12">
+      <h3 class="text-2xl font-semibold text-emerald-900 mb-4">🧾 Order Summary</h3>
+      <ul class="space-y-2 bg-emerald-50/90 p-5 rounded-lg border border-emerald-200 text-emerald-800">
+        {% for item in cart_items %}
+          <li class="flex justify-between">
+            <span>{{ item.product_name }}</span>
+            <span>{{ item.quantity }} × ${{ item.price|floatformat:2 }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="mt-5 text-xl font-semibold text-emerald-900 border-t border-emerald-200 pt-4">
+        Total: ${{ total_price|floatformat:2 }}
+      </p>
+    </div>
+
+    <!-- Shipping Info -->
+    <div class="mt-12">
+      <h3 class="text-2xl font-semibold text-emerald-900 mb-4">📦 Shipping To</h3>
+      <div class="bg-emerald-50/90 p-5 rounded-lg border border-emerald-200 text-emerald-800 space-y-1">
+        <p><strong>Name:</strong> {{ shipping_info.full_name }}</p>
+        <p><strong>Address:</strong> {{ shipping_info.address }}</p>
+        <p><strong>Phone:</strong> {{ shipping_info.phone_number }}</p>
+      </div>
+    </div>
+
+    <!-- Return Button -->
+    <div class="text-center mt-12">
+      <a href="{% url 'product_list' %}" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md transition">
+        Continue Shopping
+      </a>
+    </div>
+
+  </div>
 </section>
 {% endblock %}

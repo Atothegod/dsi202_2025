@@ -45,19 +45,18 @@ def add_product_view(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
-            
-            # ✅ แก้ตรงนี้ให้ดึง Seller ที่ผูกกับ User
+
+            # ✅ ตรวจสอบว่า user มี Seller หรือยัง ถ้ายังให้สร้าง Seller ขึ้นมา
             try:
                 seller = Seller.objects.get(user=request.user)
-                product.seller = seller
             except Seller.DoesNotExist:
-                # ถ้ายังไม่มี Seller ให้แจ้ง error หรือ redirect ไปสร้างก่อน
-                return render(request, 'error.html', {
-                    'message': 'คุณยังไม่ได้ลงทะเบียนเป็นผู้ขาย กรุณาติดต่อแอดมินหรือลงทะเบียนก่อน'
-                })
+                # ถ้าไม่มี Seller ให้สร้าง Seller ให้กับ User
+                seller = Seller(user=request.user)
+                seller.save()  # บันทึก Seller ใหม่ที่ผูกกับ User
 
+            product.seller = seller  # กำหนดให้ product มี Seller ที่เพิ่งสร้างหรือมีอยู่แล้ว
             product.save()
-            return redirect('product_detail', pk=product.pk)
+            return redirect('product_list')
     else:
         form = ProductForm()
     return render(request, 'add_product.html', {'form': form})

@@ -7,9 +7,43 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#2A9D8F',
+            'primary-light': '#8AB17D',
+            'primary-dark': '#264653',
+            'secondary': '#E9C46A',
+            'accent': '#F4A261',
+            'danger': '#E76F51',
+            'light': '#F8F9FA',
+            'dark': '#212529',
+          },
+          fontFamily: {
+            'sans': ['"Open Sans"', 'sans-serif'],
+            'serif': ['"Cormorant Garamond"', 'serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,98 +51,228 @@
   <!-- Custom Styles -->
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #263238, #004d40); /* สีน้ำเงินเข้ม-เขียวเข้ม */
-      color: #E0F2F1; /* สีขาวอมเขียว */
+      @apply bg-light text-dark font-sans antialiased;
+      background-image: radial-gradient(circle at 10% 20%, rgba(138, 177, 125, 0.1) 0%, rgba(248, 249, 250, 1) 90%);
     }
 
-    .glass {
-      backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
+    .nav-shadow {
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     }
 
-    .gradient-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -10;
-      background: radial-gradient(circle at 30% 30%, #4e342e, #00695c, #263238);
-      opacity: 0.4;
-      filter: blur(90px);
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    .header {
-      font-family: 'Playfair Display', serif;
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-gradient {
+      background-image: linear-gradient(to right, #2A9D8F 0%, #8AB17D 100%);
+      background-size: 200% auto;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+    }
+
+    .leaf-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%232a9d8f' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col text-gray-100 bg-gradient-to-br from-[#263238] to-[#004d40]">
-  <!-- Glow -->
-  <div class="gradient-bg"></div>
-
+<body class="min-h-screen flex flex-col">
   <!-- Navigation -->
-  <nav class="glass sticky top-0 z-50 shadow-lg py-4 px-6">
+  <nav class="bg-white nav-shadow sticky top-0 z-50 py-4 px-6">
     <div class="container mx-auto flex justify-between items-center">
-      <a href="{% url 'homepage' %}" class="text-3xl font-bold text-emerald-300 hover:text-white transition tracking-wider">
-        Treevaq🌱
+      <a href="{% url 'homepage' %}" class="text-3xl font-serif font-bold text-primary hover:text-primary-dark transition">
+        <span class="text-primary-dark">Tree</span><span class="text-primary">vaq</span>🌱
       </a>
-      <div class="hidden md:flex space-x-6 text-md font-medium">
-        <a href="{% url 'product_list' %}" class="hover:text-white transition">Products</a>
-        <a href="#" class="hover:text-white transition">About</a>
-        <a href="#" class="hover:text-white transition">Contact</a>
-        <a href="{% url 'cart_view' %}" class="relative hover:text-white transition">
-          🛒 <span id="cart-count" class="absolute -top-2 -right-3 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full">{{ cart_count|default:'0' }}</span>
+      <div class="hidden md:flex space-x-8 items-center text-md font-medium">
+        <a href="{% url 'product_list' %}" class="text-dark hover:text-primary transition">Products</a>
+        <a href="#" class="text-dark hover:text-primary transition">About</a>
+        <a href="#" class="text-dark hover:text-primary transition">Contact</a>
+        <a href="{% url 'cart_view' %}" class="relative text-dark hover:text-primary transition">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cart-count" class="absolute -top-2 -right-3 bg-accent text-white text-xs px-2 py-0.5 rounded-full font-bold">{{ cart_count|default:'0' }}</span>
         </a>
         {% if user.is_authenticated %}
-          <a href="{% url 'add_product' %}" class="hover:text-white transition">+ Add Product</a>
+          <a href="{% url 'add_product' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-dark transition">
+            <i class="fas fa-plus mr-1"></i> Add Product
+          </a>
           <form method="POST" action="{% url 'logout' %}" class="inline">
             {% csrf_token %}
-            <button type="submit" class="hover:text-red-400 transition">Logout</button>
+            <button type="submit" class="text-dark hover:text-danger transition">
+              <i class="fas fa-sign-out-alt mr-1"></i> Logout
+            </button>
           </form>
         {% else %}
-          <a href="{% url 'sign_up' %}" class="hover:text-white transition">Sign Up</a>
-          <a href="{% url 'login' %}" class="hover:text-white transition">Login</a>
+          <a href="{% url 'sign_up' %}" class="text-dark hover:text-primary transition">Sign Up</a>
+          <a href="{% url 'login' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-dark transition">
+            <i class="fas fa-sign-in-alt mr-1"></i> Login
+          </a>
         {% endif %}
       </div>
+      <button class="md:hidden text-primary-dark text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="flex-grow container mx-auto px-4 py-16">
+  <main class="flex-grow">
     {% block content %}
-    <div class="text-center space-y-6">
-      <h1 class="text-4xl md:text-5xl font-serif font-bold text-white">Welcome to Your Eco-Luxury Haven 🌴</h1>
-      <p class="text-lg max-w-xl mx-auto text-gray-200">Premium plant-based lifestyle products delivered with love from our digital island.</p>
-      <a href="{% url 'product_list' %}" class="inline-block bg-black text-white text-lg font-semibold px-6 py-3 rounded-full hover:bg-gray-900 transition shadow-md hover:shadow-lg">
-        Explore Our Garden
-      </a>
-    </div>
+    <section class="py-20 px-4">
+      <div class="container mx-auto flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-12 md:mb-0">
+          <h1 class="text-4xl md:text-6xl font-serif font-bold text-primary-dark mb-6 leading-tight">
+            Luxury Meets Sustainability
+          </h1>
+          <p class="text-xl text-gray-700 mb-8 max-w-lg">
+            Discover our premium collection of eco-friendly products that don't compromise on style or quality.
+          </p>
+          <div class="flex space-x-4">
+            <a href="{% url 'product_list' %}" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg">
+              Shop Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="#" class="border-2 border-primary text-primary font-semibold px-8 py-3 rounded-full hover:bg-primary hover:text-white transition">
+              Learn More
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2 flex justify-center">
+          <img src="https://images.unsplash.com/photo-1595341595379-cf1cd0fb7fb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80" 
+               alt="Luxury eco products" 
+               class="rounded-xl shadow-2xl w-full max-w-md floating">
+        </div>
+      </div>
+    </section>
     {% endblock %}
   </main>
 
-  <!-- Black Highlight Section -->
-  <section class="bg-black text-white py-20">
-    <div class="container mx-auto text-center space-y-6">
-      <h2 class="text-3xl md:text-5xl font-bold font-serif tracking-wide">Trusted by 10,000+ eco-lovers</h2>
-      <p class="text-gray-400 text-lg max-w-xl mx-auto">
-        “Treevaq changed how I live with nature. It's tech meets harmony.” — 🌿 Maui Resident
-      </p>
+  <!-- Features Section -->
+  <section class="py-16 bg-white leaf-pattern">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-dark mb-4">Why Choose Treevaq?</h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">We combine luxury with sustainability to create products you'll love</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-xl shadow-md card-hover text-center">
+          <div class="text-primary text-4xl mb-4">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Eco-Friendly</h3>
+          <p class="text-gray-600">All our products are sustainably sourced and manufactured with minimal environmental impact.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-md card-hover text-center">
+          <div class="text-primary text-4xl mb-4">
+            <i class="fas fa-award"></i>
+          </div>
+          <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Premium Quality</h3>
+          <p class="text-gray-600">We never compromise on quality, ensuring you get the best eco-luxury experience.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-md card-hover text-center">
+          <div class="text-primary text-4xl mb-4">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Customer Love</h3>
+          <p class="text-gray-600">Join our community of 10,000+ satisfied customers who trust our brand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-20 bg-primary-dark text-white">
+    <div class="container mx-auto px-4 text-center">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-5xl mb-6 text-primary-light">
+          <i class="fas fa-quote-left"></i>
+        </div>
+        <p class="text-xl md:text-2xl font-serif italic mb-8">
+          "Treevaq has completely transformed my approach to sustainable living. Their products prove you don't have to sacrifice luxury to be eco-conscious."
+        </p>
+        <div class="flex items-center justify-center space-x-4">
+          <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Customer" class="w-12 h-12 rounded-full border-2 border-primary-light">
+          <div class="text-left">
+            <p class="font-bold">Sarah Johnson</p>
+            <p class="text-primary-light text-sm">New York</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-serif font-bold text-primary-dark mb-4">Join Our Green Movement</h2>
+      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Subscribe to get exclusive offers, eco-living tips, and early access to new products.</p>
+      <form class="max-w-md mx-auto flex">
+        <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        <button type="submit" class="bg-primary text-white px-6 py-3 rounded-r-lg hover:bg-primary-dark transition">
+          Subscribe
+        </button>
+      </form>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-black text-white py-12">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
-      <p class="text-center md:text-left text-lg font-serif">© 2025 Treevaq🌱 — Rooted in Innovation</p>
-      <div class="space-x-4 text-sm">
-        <a href="#" class="hover:underline hover:text-emerald-300">Privacy</a>
-        <a href="#" class="hover:underline hover:text-emerald-300">Terms</a>
-        <a href="#" class="hover:underline hover:text-emerald-300">Support</a>
+  <footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-2xl font-serif font-bold text-white mb-4">
+            <span class="text-primary-light">Tree</span><span class="text-primary">vaq</span>🌱
+          </h3>
+          <p class="text-gray-400">Luxury sustainable products for the conscious consumer.</p>
+        </div>
+        <div>
+          <h4 class="font-serif font-bold text-lg mb-4">Shop</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">All Products</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">New Arrivals</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">Best Sellers</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">Special Offers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-serif font-bold text-lg mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">About Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">Sustainability</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">Blog</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-serif font-bold text-lg mb-4">Connect</h4>
+          <div class="flex space-x-4 mb-4">
+            <a href="#" class="text-gray-400 hover:text-primary text-xl transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-400 hover:text-primary text-xl transition"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-gray-400 hover:text-primary text-xl transition"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-primary text-xl transition"><i class="fab fa-pinterest"></i></a>
+          </div>
+          <p class="text-gray-400">hello@treevaq.com</p>
+          <p class="text-gray-400">+1 (555) 123-4567</p>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 mb-4 md:mb-0">© 2025 Treevaq. All rights reserved.</p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-primary transition">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-primary transition">Terms of Service</a>
+          <a href="#" class="text-gray-400 hover:text-primary transition">Shipping Policy</a>
+        </div>
       </div>
     </div>
   </footer>
