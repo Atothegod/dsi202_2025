@@ -8,7 +8,13 @@
 
     <h2 class="text-4xl font-serif text-white font-bold text-center mb-12">🌿 Checkout</h2>
 
-    <form method="POST">
+    {% if error %}
+      <div class="mb-6 p-4 bg-red-200 text-red-800 rounded">
+        {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="POST" id="checkout-form">
       {% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
@@ -16,25 +22,32 @@
         <div>
           <h3 class="text-2xl font-semibold text-emerald-100 mb-6">Shipping Information</h3>
 
+          <label for="selected_address" class="block text-sm font-medium text-emerald-200 mb-1">เลือกที่อยู่ที่บันทึกไว้</label>
+          <select name="selected_address" id="selected_address"
+                  class="w-full p-3 bg-white/90 text-green-900 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 mb-6">
+            <option value="" {% if not selected_address %}selected{% endif %}>-- กรอกที่อยู่ใหม่ --</option>
+            {% for addr in addresses %}
+              <option value="{{ addr.id }}" {% if selected_address|stringformat:"s" == addr.id|stringformat:"s" %}selected{% endif %}>
+                {{ addr.full_name }} - {{ addr.address_line1|truncatechars:30 }}
+              </option>
+            {% endfor %}
+          </select>
+
           <label for="full_name" class="block text-sm font-medium text-emerald-200 mb-1">Full Name</label>
-          <input type="text" name="full_name" id="full_name" required
-                 class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 
-                        border border-emerald-300 rounded-lg 
-                        focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          <input type="text" name="full_name" id="full_name"
+                 value="{{ full_name|default_if_none:'' }}"
+                 class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                  placeholder="Your full name" />
 
           <label for="address" class="block text-sm font-medium text-emerald-200 mt-5 mb-1">Address</label>
-          <textarea name="address" id="address" required
-                    class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 
-                           border border-emerald-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Your shipping address"></textarea>
+          <textarea name="address" id="address"
+                    class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Your shipping address">{{ address|default_if_none:'' }}</textarea>
 
           <label for="phone_number" class="block text-sm font-medium text-emerald-200 mt-5 mb-1">Phone Number</label>
-          <input type="text" name="phone_number" id="phone_number" required
-                 class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 
-                        border border-emerald-300 rounded-lg 
-                        focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          <input type="text" name="phone_number" id="phone_number"
+                 value="{{ phone_number|default_if_none:'' }}"
+                 class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                  placeholder="Your phone number" />
         </div>
 
@@ -66,7 +79,34 @@
         </button>
       </div>
     </form>
-
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectedAddress = document.getElementById('selected_address');
+    const fullName = document.getElementById('full_name');
+    const address = document.getElementById('address');
+    const phoneNumber = document.getElementById('phone_number');
+
+    function toggleFields() {
+      if (selectedAddress.value) {
+        // ถ้าเลือกที่อยู่จากโปรไฟล์ > disable กรอกใหม่
+        fullName.disabled = true;
+        address.disabled = true;
+        phoneNumber.disabled = true;
+      } else {
+        // ถ้าเลือกกรอกใหม่ > enable
+        fullName.disabled = false;
+        address.disabled = false;
+        phoneNumber.disabled = false;
+      }
+    }
+
+    selectedAddress.addEventListener('change', toggleFields);
+
+    // เรียกครั้งแรกตอนโหลดหน้า
+    toggleFields();
+  });
+</script>
 {% endblock %}

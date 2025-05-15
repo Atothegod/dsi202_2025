@@ -89,6 +89,9 @@
   </style>
 </head>
 
+  <!-- Nav -->
+<!-- Nav -->
+
 <body class="min-h-screen flex flex-col">
 <nav class="bg-primary-dark nav-shadow sticky top-0 z-50 py-4 px-6 text-white">
   <div class="container mx-auto flex justify-between items-center">
@@ -104,6 +107,8 @@
         <span id="cart-count" class="absolute -top-2 -right-3 bg-accent text-white text-xs px-2 py-0.5 rounded-full font-bold">{{ cart_count|default:'0' }}</span>
       </a>
       {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="hover:text-primary-light transition">Profile</a>  <!-- เพิ่มตรงนี้ -->
+
         <a href="{% url 'add_product' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-dark transition">
           <i class="fas fa-plus mr-1"></i> Add Product
         </a>
@@ -125,6 +130,7 @@
     </button>
   </div>
 </nav>
+
 
 
   <!-- Main Content -->

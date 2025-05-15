@@ -10,9 +10,29 @@
 
     <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code" style="width: 300px; margin: 1.5rem 0; border: 4px solid #333; border-radius: 0.5rem; background-color: white;">
 
-    <form method="post" action="{% url 'order_success' %}">
+    <!-- ฟอร์มอัปโหลดสลิป -->
+    <h3 style="margin-top: 2rem; color: #444;">แนบสลิปโอนเงิน</h3>
+
+    {% if payment_status == 'confirmed' %}
+      <p style="color: green; font-weight: 600;">สถานะชำระเงิน: ยืนยันแล้ว</p>
+      {% if form.instance.slip %}
+        <p>สลิปที่อัปโหลด:</p>
+        <img src="{{ form.instance.slip.url }}" alt="Slip Image" style="max-width: 100%; max-height: 300px; border: 1px solid #ccc; border-radius: 0.5rem;">
+      {% endif %}
+    {% elif payment_status == 'pending' %}
+      <p style="color: orange; font-weight: 600;">สถานะชำระเงิน: รอตรวจสอบสลิป</p>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" style="width: 100%; margin-top: 1rem;">
       {% csrf_token %}
-      <button type="submit" style="background-color: #0d6efd; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;">
+      {{ form.slip_image.label_tag }}
+      {{ form.slip_image }}
+    </form>
+
+    <!-- ปุ่มชำระเงินเรียบร้อย (ถ้าต้องการเก็บไว้) -->
+    <form method="post" action="{% url 'order_success' %}" style="margin-top: 2rem; width: 100%;">
+      {% csrf_token %}
+      <button type="submit" style="background-color: #198754; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; width: 100%; transition: background-color 0.3s ease;">
         ชำระเงินเรียบร้อย
       </button>
     </form>
