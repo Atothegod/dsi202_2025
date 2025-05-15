@@ -88,16 +88,26 @@ class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     store_name = models.CharField(max_length=255)
 
-# เพิ่มใน models.py (ถ้ายังไม่มี)
 class Shipping(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'ยังไม่จัดส่ง'),
+        ('shipped', 'ส่งพัสดุแล้ว'),
+        ('in_transit', 'กำลังขนส่ง'),
+        ('delivered', 'จัดส่งสำเร็จ'),
+        ('failed', 'จัดส่งล้มเหลว'),
+    ]
+
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100, default='Unknown')
     address = models.TextField()
     phone_number = models.CharField(max_length=20, default='N/A')
     tracking_number = models.CharField(max_length=50, blank=True, null=True)
+    shipping_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Shipping for Order {self.order.id}"
+        return f"Shipping for Order {self.order.id} - Status: {self.shipping_status}"
+
 
 
 class Support(models.Model):

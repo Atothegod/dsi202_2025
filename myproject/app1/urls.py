@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import ProductListView, ProductDetailView, cart_view, CustomLoginView, add_product_view
+from .views import ProductListView, ProductDetailView, cart_view, CustomLoginView, add_product_view, payment_qr_view, order_status_view, order_delete_view, contact_view
 from django.contrib.auth import views as auth_views
 
 
@@ -19,4 +19,8 @@ urlpatterns = [
     path('auth/', include('social_django.urls', namespace='social')),
     path('checkout/', views.checkout_view, name='checkout'),
     path('order_success/', views.order_success, name='order_success'),
+    path('payment_qr/', payment_qr_view, name='payment_qr'),
+    path('order_status/', order_status_view, name='order_status'),
+    path('order_delete/<int:order_id>/', order_delete_view, name='order_delete'),
+    path('contact/', views.contact_view, name='contact')
 ]

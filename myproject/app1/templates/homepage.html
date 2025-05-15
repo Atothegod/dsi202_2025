@@ -1,93 +1,125 @@
-{% extends "base.html" %}
-
-{% block title %}Home | Treevaq🌱{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Treevaq 🌿 | Luxury Meets Nature{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
-<section class="py-20 px-4">
-  <div class="container mx-auto flex flex-col md:flex-row items-center">
-    <div class="md:w-1/2 mb-12 md:mb-0">
-      <h1 class="text-4xl md:text-6xl font-serif font-bold text-primary-dark mb-6 leading-tight">
-        Luxury Meets Sustainability
+<section class="relative py-32 bg-gradient-to-r from-primary-dark to-primary">
+  <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2 mb-12 md:mb-0 text-center md:text-left">
+      <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-6 leading-tight">
+        Luxury Meets <span class="text-secondary">Nature</span>
       </h1>
-      <p class="text-xl text-gray-700 mb-8 max-w-lg">
-        Discover our premium collection of eco-friendly products that don't compromise on style or quality.
+      <p class="text-xl text-gray-100 mb-8 max-w-lg">
+        Sustainably crafted products that elevate your lifestyle while protecting our planet.
       </p>
-      <div class="flex space-x-4">
+      <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
         <a href="{% url 'product_list' %}" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg">
-          Shop Now <i class="fas fa-arrow-right ml-2"></i>
+          Shop Collection <i class="fas fa-arrow-right ml-2"></i>
         </a>
-        <a href="#features" class="border-2 border-primary text-primary font-semibold px-8 py-3 rounded-full hover:bg-primary hover:text-white transition">
-          Learn More
+        <a href="#" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-full hover:bg-white hover:text-primary-dark transition">
+          Our Story
         </a>
       </div>
     </div>
     <div class="md:w-1/2 flex justify-center">
-      <img src="https://images.unsplash.com/photo-1595341595379-cf1cd0fb7fb3?auto=format&fit=crop&w=1287&q=80" 
+      <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
            alt="Luxury eco products" 
            class="rounded-xl shadow-2xl w-full max-w-md floating">
     </div>
   </div>
 </section>
 
-<!-- Features Section -->
-<section id="features" class="py-16 bg-white leaf-pattern">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-dark mb-4">Why Choose Treevaq?</h2>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto">We combine luxury with sustainability to create products you'll love.</p>
-    </div>
-    <div class="grid md:grid-cols-3 gap-8">
-      {% for feature in features %}
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover text-center">
-        <div class="text-primary text-4xl mb-4">
-          <i class="fas fa-{{ feature.icon }}"></i>
-        </div>
-        <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">{{ feature.title }}</h3>
-        <p class="text-gray-600">{{ feature.description }}</p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- Testimonial Section -->
-<section class="py-20 bg-primary-dark text-white">
-  <div class="container mx-auto px-4 text-center">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-5xl mb-6 text-primary-light">
-        <i class="fas fa-quote-left"></i>
-      </div>
-      <p class="text-xl md:text-2xl font-serif italic mb-8">
-        "{{ testimonial.text }}"
-      </p>
-      <div class="flex items-center justify-center space-x-4">
-        <img src="{{ testimonial.image_url }}" alt="Customer" class="w-12 h-12 rounded-full border-2 border-primary-light">
-        <div class="text-left">
-          <p class="font-bold">{{ testimonial.name }}</p>
-          <p class="text-primary-light text-sm">{{ testimonial.location }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Newsletter Section -->
+<!-- Feature Strip -->
 <section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-light p-8 rounded-xl shadow-sm text-center card-hover">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Botanical Precision</h3>
+        <p class="text-gray-600">Every ingredient carefully selected for maximum efficacy and minimal environmental impact.</p>
+      </div>
+      <div class="bg-light p-8 rounded-xl shadow-sm text-center card-hover">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-globe-americas"></i>
+        </div>
+        <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Carbon Neutral</h3>
+        <p class="text-gray-600">Full transparency in our carbon footprint with 100% offset shipping.</p>
+      </div>
+      <div class="bg-light p-8 rounded-xl shadow-sm text-center card-hover">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-truck"></i>
+        </div>
+        <h3 class="text-xl font-serif font-bold text-primary-dark mb-3">Global Delivery</h3>
+        <p class="text-gray-600">Eco-friendly packaging that protects your products and the planet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ambient Banner -->
+<section class="py-32 bg-[url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center bg-fixed">
   <div class="container mx-auto px-4 text-center">
-    <h2 class="text-3xl font-serif font-bold text-primary-dark mb-4">Join Our Green Movement</h2>
-    <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
-      Subscribe to get exclusive offers, eco-living tips, and early access to new products.
-    </p>
-    <form method="post" class="max-w-md mx-auto flex">
-      {% csrf_token %}
-      <input type="email" name="email" placeholder="Your email address"
-             class="flex-grow px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-      <button type="submit" class="bg-primary text-white px-6 py-3 rounded-r-lg hover:bg-primary-dark transition">
-        Subscribe
-      </button>
-    </form>
+    <div class="bg-white/90 backdrop-blur-sm inline-block px-12 py-8 rounded-xl shadow-lg">
+      <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-dark mb-4">Nature. Elegantly Delivered.</h2>
+      <p class="text-gray-700 max-w-2xl mx-auto">Our commitment to sustainability is matched only by our dedication to exceptional design.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-20 bg-primary-light text-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Trusted by Eco-Conscious Consumers</h2>
+      <p class="text-xl text-gray-100 max-w-2xl mx-auto">Join thousands who've made the switch to sustainable luxury</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm">
+        <div class="text-3xl text-secondary mb-4">
+          <i class="fas fa-quote-left"></i>
+        </div>
+        <p class="text-lg italic text-gray-100 mb-6">"Treevaq products make sustainable living feel luxurious. It's the perfect balance of ethics and aesthetics."</p>
+        <div class="flex items-center">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Amira" class="w-12 h-12 rounded-full border-2 border-secondary">
+          <div class="ml-4">
+            <p class="font-bold">Amira Tanaka</p>
+            <p class="text-secondary-light text-sm">Tokyo, Japan</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm">
+        <div class="text-3xl text-secondary mb-4">
+          <i class="fas fa-quote-left"></i>
+        </div>
+        <p class="text-lg italic text-gray-100 mb-6">"Finally, a brand that proves eco-friendly can be high-end. The packaging alone is a work of art."</p>
+        <div class="flex items-center">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Luca" class="w-12 h-12 rounded-full border-2 border-secondary">
+          <div class="ml-4">
+            <p class="font-bold">Luca Bianchi</p>
+            <p class="text-secondary-light text-sm">Milan, Italy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-24 bg-gradient-to-br from-primary-dark to-primary text-center text-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">Live Lightly, Choose Beautifully</h2>
+    <p class="text-xl text-gray-100 max-w-2xl mx-auto mb-8">Join our community of conscious consumers and experience luxury that loves the planet.</p>
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+      <a href="{% url 'sign_up' %}" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg">
+        Get Started <i class="fas fa-arrow-right ml-2"></i>
+      </a>
+      <a href="{% url 'product_list' %}" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-full hover:bg-white hover:text-primary-dark transition">
+        Browse Products
+      </a>
+    </div>
   </div>
 </section>
 

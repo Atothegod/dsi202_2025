@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}ชำระเงินผ่าน PromptPay{% endblock %}
+
+{% block content %}
+  <div style="display: flex; flex-direction: column; align-items: center; background-color: #f8f9fa; padding: 2rem; border-radius: 1rem; max-width: 600px; margin: auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #333; font-weight: 600;">แสกน QR ชำระเงินผ่าน PromptPay</h2>
+    <p style="color: #555; font-size: 1.1rem;">คำสั่งซื้อ: <strong>{{ order.id }}</strong></p>
+    <p style="color: #555; font-size: 1.1rem;">จำนวนเงิน: <strong>{{ amount }} บาท</strong></p>
+
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code" style="width: 300px; margin: 1.5rem 0; border: 4px solid #333; border-radius: 0.5rem; background-color: white;">
+
+    <form method="post" action="{% url 'order_success' %}">
+      {% csrf_token %}
+      <button type="submit" style="background-color: #0d6efd; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;">
+        ชำระเงินเรียบร้อย
+      </button>
+    </form>
+  </div>
+{% endblock %}

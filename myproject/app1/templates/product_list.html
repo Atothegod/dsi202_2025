@@ -1,76 +1,231 @@
 {% extends 'base.html' %}
 
-{% block title %}Treevaq🌱 - Shop Botanical Products{% endblock %}
+{% block title %}Treevaq🌱 - Premium Sustainable Products{% endblock %}
 
 {% block content %}
-<!-- Search Bar -->
-<section class="py-12">
-    <form method="GET" action="{% url 'product_list' %}" class="flex justify-center space-x-4">
-        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search for products..." 
-               class="px-4 py-3 w-3/4 md:w-1/3 rounded-lg bg-[#f0fdf4] text-green-900 border border-green-300 focus:ring-2 focus:ring-emerald-500 placeholder-emerald-400 shadow-md" />
-        <button type="submit" 
-                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400">
-            Search
+<!-- Hero Section -->
+<section class="relative py-24 bg-gradient-to-br from-primary-dark to-primary text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80')] bg-cover bg-center"></div>
+  </div>
+  <div class="container mx-auto px-4 text-center relative z-10">
+    <h1 class="text-5xl md:text-6xl font-serif font-bold mb-6">Our Botanical Collection</h1>
+    <p class="text-xl text-primary-light max-w-2xl mx-auto">Premium plant-based products crafted with sustainability at their core</p>
+  </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="py-12 bg-[#4d4038] shadow-sm">
+  <div class="container mx-auto px-4 bg">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <form method="GET" action="{% url 'product_list' %}" class="flex-grow max-w-2xl relative">
+        <div class="relative">
+          <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search for sustainable products..." 
+                 class="w-full px-6 py-4 rounded-full border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm placeholder-gray-400 text-gray-700" />
+          <button type="submit" class="absolute right-2 top-2 btn-gradient text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all">
+            <i class="fas fa-search mr-2"></i> Search
+          </button>
+        </div>
+      </form>
+      
+      <div class="flex flex-wrap gap-2 justify-center md:justify-end">
+        <button class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium shadow-md hover:bg-primary-dark transition">
+          <i class="fas fa-list mr-1"></i> All Categories
         </button>
-    </form>
+        <button class="px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 transition shadow-sm">
+          <i class="fas fa-spa mr-1"></i> Wellness
+        </button>
+        <button class="px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 transition shadow-sm">
+          <i class="fas fa-hand-holding-water mr-1"></i> Skincare
+        </button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Promo Banner -->
-<section class="py-8">
-    <div class="glass bg-gradient-to-r from-emerald-800 to-emerald-700 text-white rounded-xl shadow-2xl p-8 flex flex-col md:flex-row items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <span class="text-3xl font-extrabold tracking-wide">🌿 Eco Deals</span>
-            <span class="text-lg text-emerald-100">Save up to 30% + Free Global Shipping!</span>
+<section class="py-8 bg-[#6d5e53]">
+  <div class="container mx-auto px-4">
+    <div class="bg-gradient-to-r from-primary-dark to-primary text-white rounded-xl shadow-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between">
+      <div class="flex items-center space-x-6 mb-4 md:mb-0">
+        <div class="text-4xl text-secondary">
+          <i class="fas fa-leaf"></i>
         </div>
-        <a href="{% url 'product_list' %}" class="mt-6 md:mt-0 px-8 py-3 bg-black text-white rounded-full font-semibold hover:bg-gray-900 transition-all hover:scale-105">
-            Shop Now
-        </a>
+        <div>
+          <h3 class="text-2xl font-serif font-bold">Summer Sustainability Sale</h3>
+          <p class="text-primary-light">Enjoy 30% off + carbon-neutral shipping on all orders</p>
+        </div>
+      </div>
+      <a href="#" class="px-8 py-3 bg-white text-primary-dark rounded-full font-semibold hover:bg-gray-100 transition shadow-lg hover:scale-[1.02]">
+        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+      </a>
     </div>
+  </div>
 </section>
 
-<!-- Feature Icons -->
-<section class="py-10">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div class="text-4xl text-emerald-400 mb-2">📦</div>
-            <p class="text-white font-medium">General</p>
+<!-- Product Categories -->
+<section class="py-16 bg-[#6d5e53]">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-serif font-bold text-white mb-12 text-center">Shop by Category</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <a href="#" class="bg-[#eff3e6] p-8 rounded-xl shadow-sm text-center card-hover border border-gray-100 hover:border-primary/20">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-spa"></i>
         </div>
-        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div class="text-4xl text-emerald-400 mb-2">🧴</div>
-            <p class="text-white font-medium">SkinCare</p>
+        <h3 class="text-lg font-medium text-gray-800">Wellness</h3>
+        <p class="text-gray-500 text-sm mt-2">32 sustainable products</p>
+      </a>
+      <a href="#" class="bg-[#eff3e6] p-8 rounded-xl shadow-sm text-center card-hover border border-gray-100 hover:border-primary/20">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-hand-holding-water"></i>
         </div>
-        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div class="text-4xl text-emerald-400 mb-2">🍎</div>
-            <p class="text-white font-medium">Supermarket</p>
+        <h3 class="text-lg font-medium text-gray-800">Skincare</h3>
+        <p class="text-gray-500 text-sm mt-2">18 organic products</p>
+      </a>
+      <a href="#" class="bg-[#eff3e6] p-8 rounded-xl shadow-sm text-center card-hover border border-gray-100 hover:border-primary/20">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-apple-alt"></i>
         </div>
-        <div class="glass p-4 rounded-lg hover:scale-105 transition-all duration-300 ease-in-out">
-            <div class="text-4xl text-emerald-400 mb-2">🚚</div>
-            <p class="text-white font-medium">Free Delivery</p>
+        <h3 class="text-lg font-medium text-gray-800">Superfoods</h3>
+        <p class="text-gray-500 text-sm mt-2">24 nutrient-rich foods</p>
+      </a>
+      <a href="#" class="bg-[#eff3e6] p-8 rounded-xl shadow-sm text-center card-hover border border-gray-100 hover:border-primary/20">
+        <div class="text-primary text-4xl mb-4">
+          <i class="fas fa-home"></i>
         </div>
+        <h3 class="text-lg font-medium text-gray-800">Home</h3>
+        <p class="text-gray-500 text-sm mt-2">15 eco-friendly items</p>
+      </a>
     </div>
+  </div>
 </section>
 
 <!-- Product Grid -->
-<section class="py-20">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {% for product in products %}
-            <div class="glass bg-gradient-to-br from-[#0f1f1c] to-[#132623] shadow-xl rounded-2xl overflow-hidden transform transition duration-300 hover:scale-[1.03] hover:shadow-2xl">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h2 class="text-xl font-bold text-white">{{ product.name }}</h2>
-                    <p class="text-emerald-200 mt-2">{{ product.description|slice:":100" }}...</p>
-                    <p class="text-emerald-400 font-medium mt-2">Eco Score: {{ product.eco_score }}</p>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="text-lg font-semibold text-white">${{ product.price }}</span>
-                        <a href="{% url 'product_detail' product.id %}" class="text-emerald-300 hover:text-emerald-200 transition-colors">
-                            View →
-                        </a>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <p class="col-span-3 text-center text-gray-400">No products found. Try another keyword.</p>
-        {% endfor %}
+<section class="py-16 bg-gradient-to-r from-primary-dark to-primary">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+      <h2 class="text-3xl font-serif font-bold text-white">Featured Sustainable Products</h2>
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-500 text-sm">Sort by:</span>
+        <select class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 text-sm font-medium focus:ring-primary focus:border-primary">
+          <option>Newest First</option>
+          <option>Highest Eco Score</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+        </select>
+      </div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for product in products %}
+      <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover border border-gray-100">
+        <div class="relative h-64 overflow-hidden group">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+               class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+          {% if product.eco_score > 8 %}
+          <span class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md flex items-center">
+            <i class="fas fa-star mr-1"></i> Eco Star
+          </span>
+          {% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-lg font-bold text-gray-800">{{ product.name }}</h3>
+            <span class="text-primary font-bold">${{ product.price }}</span>
+          </div>
+          <p class="text-gray-500 text-sm mb-4">{{ product.description|truncatechars:100 }}</p>
+          
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="relative w-16 h-2 bg-gray-200 rounded-full mr-2">
+                <div class="absolute top-0 left-0 h-full bg-primary rounded-full" style="width: {{ product.eco_score }}0%"></div>
+              </div>
+              <span class="text-xs font-medium text-primary">
+                {{ product.eco_score }}/10
+              </span>
+            </div>
+            <a href="{% url 'product_detail' product.id %}" class="text-primary hover:text-primary-dark font-medium text-sm flex items-center group">
+              View Details <i class="fas fa-chevron-right ml-1 text-xs group-hover:translate-x-1 transition-transform"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-3 text-center py-16 bg-[#f5f7f2] rounded-xl shadow-sm">
+        <div class="inline-block bg-[#e8eee0] p-6 rounded-full mb-6">
+          <i class="fas fa-search text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-medium text-gray-600">No products found</h3>
+        <p class="text-gray-400 mt-2 max-w-md mx-auto">We couldn't find any products matching your criteria. Try adjusting your search or filters.</p>
+        <a href="{% url 'product_list' %}" class="mt-6 inline-block text-primary hover:text-primary-dark font-medium">
+          <i class="fas fa-undo mr-2"></i> Reset filters
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-16 flex justify-center">
+      <nav class="inline-flex rounded-md shadow-sm">
+        <a href="#" class="px-4 py-2 rounded-l-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 flex items-center">
+          <i class="fas fa-chevron-left mr-1"></i> Previous
+        </a>
+        <a href="#" class="px-4 py-2 border-t border-b border-gray-200 bg-white text-primary font-medium">
+          1
+        </a>
+        <a href="#" class="px-4 py-2 border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">
+          2
+        </a>
+        <a href="#" class="px-4 py-2 border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">
+          3
+        </a>
+        <a href="#" class="px-4 py-2 rounded-r-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 flex items-center">
+          Next <i class="fas fa-chevron-right ml-1"></i>
+        </a>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<!-- Sustainability Commitment -->
+<section class="py-20 bg-[#f7f6f1]">
+  <div class="container mx-auto px-4">
+    <div class="bg-gradient-to-br from-primary-dark to-primary rounded-2xl shadow-xl overflow-hidden">
+      <div class="grid md:grid-cols-2">
+        <div class="p-12 text-white">
+          <h2 class="text-3xl font-serif font-bold mb-6">Our Sustainability Promise</h2>
+          <p class="text-lg text-primary-light mb-8">
+            Every Treevaq product undergoes rigorous evaluation for environmental impact, ethical sourcing practices, 
+            and carbon-neutral delivery. We're committed to complete transparency in our sustainability journey.
+          </p>
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-4 text-secondary">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <p class="text-white">100% carbon-neutral shipping</p>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-4 text-secondary">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <p class="text-white">Ethically sourced ingredients</p>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-4 text-secondary">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <p class="text-white">Plastic-free packaging</p>
+            </div>
+          </div>
+          <a href="#" class="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-primary-dark transition shadow-md">
+            Learn About Our Standards <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+        <div class="hidden md:block bg-[url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center"></div>
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}

@@ -1,47 +1,52 @@
 {% extends 'base.html' %}
 
 {% block title %}Your Cart - Treevaq🌱{% endblock %}
+{% block feature %}{% endblock %} {# ปิด section เกินมา #}
 
 {% block content %}
-<section class="py-20 px-6 max-w-3xl mx-auto">
-    <div class="glass p-8 rounded-xl shadow-xl">
-        <h1 class="text-4xl font-serif font-bold text-white mb-10">🛒 Your Cart</h1>
+<section class="py-20 px-6 w-full bg-gradient-to-r from-primary-dark to-primary min-h-screen">
+  <div class="glass p-10 rounded-2xl shadow-xl w-full">
+    <h1 class="text-4xl font-serif font-bold text-white mb-12">🛒 Your Cart</h1>
 
-        {% if carts %}
-            <ul class="space-y-6">
-                {% for cart_item in carts %}
-                <li class="bg-white bg-opacity-90 rounded-lg p-5 shadow-sm">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-lg font-semibold text-green-900">{{ cart_item.product.name }}</p>
-                            <p class="text-sm text-gray-700">Quantity: <strong>{{ cart_item.quantity }}</strong></p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-green-700 font-semibold text-lg">${{ cart_item.product.price|floatformat:2 }}</p>
-                            <a href="{% url 'remove_from_cart' cart_item.id %}" class="text-sm text-red-500 hover:text-red-700 underline mt-2 inline-block">
-                                Remove
-                            </a>
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-
-            <div class="mt-10 flex flex-col sm:flex-row justify-between items-center gap-6">
-                <span class="text-2xl text-white font-bold">Total: ${{ total_price|floatformat:2 }}</span>
-                <a href="{% url 'checkout' %}"
-                   class="bg-emerald-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-emerald-700 shadow transition">
-                    Proceed to Checkout
-                </a>
-            </div>
-        {% else %}
-            <div class="text-center text-white text-lg font-medium">
-                <p>Your cart is currently empty.</p>
-                <a href="{% url 'product_list' %}" class="mt-6 inline-block text-emerald-300 hover:underline hover:text-white">
-                    Browse Products →
-                </a>
-            </div>
-        {% endif %}
+    {% if carts %}
+    <div class="flex justify-center">
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl w-full">
+            <!-- cart items -->
+        </ul>
     </div>
+        {% for cart_item in carts %}
+        <li class="bg-white bg-opacity-90 rounded-xl p-6 shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xl font-semibold text-green-900">{{ cart_item.product.name }}</p>
+              <p class="text-sm text-gray-700">Quantity: <strong>{{ cart_item.quantity }}</strong></p>
+            </div>
+            <div class="text-right">
+              <p class="text-green-700 font-semibold text-xl">${{ cart_item.product.price|floatformat:2 }}</p>
+              <a href="{% url 'remove_from_cart' cart_item.id %}" class="text-sm text-red-500 hover:text-red-700 underline mt-2 inline-block">
+                Remove
+              </a>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <div class="mt-12 flex flex-col sm:flex-row justify-between items-center gap-6">
+        <span class="text-2xl text-white font-bold">Total: ${{ total_price|floatformat:2 }}</span>
+        <a href="{% url 'checkout' %}"
+           class="bg-emerald-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-emerald-700 shadow transition">
+          Proceed to Checkout
+        </a>
+      </div>
+    {% else %}
+      <div class="text-center text-white text-lg font-medium">
+        <p>Your cart is currently empty.</p>
+        <a href="{% url 'product_list' %}" class="mt-6 inline-block text-emerald-300 hover:underline hover:text-white">
+          Browse Products →
+        </a>
+      </div>
+    {% endif %}
+  </div>
 </section>
 {% endblock %}

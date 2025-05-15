@@ -14,6 +14,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import ProductForm
+from io import BytesIO
+import base64
+from .utils.promptpay import generate_promptpay_payload
+
+
 
 def homepage_view(request):
     return render(request, 'homepage.html')
@@ -178,7 +183,7 @@ def checkout_view(request):
         # 4. ล้างตะกร้า
         cart_items.delete()
 
-        return redirect('order_success')  # ไปหน้า success หลังสั่งซื้อ
+        return redirect('payment_qr')  # ไปหน้า success หลังสั่งซื้อ
 
     return render(request, 'checkout.html', {
         'cart_items': cart_items,
@@ -201,3 +206,68 @@ def order_success(request):
         'cart_items': cart_items_from_session,  # แสดงข้อมูลจาก session
         'total_price': order.total_price  # ใช้ราคาที่เก็บในคำสั่งซื้อ
     })
+
+@login_required
+def payment_qr_view(request):
+    try:
+        order = Order.objects.filter(user=request.user).latest('id')
+        promptpay_number = "0968230306"
+        amount = float(order.total_price)
+
+        from promptpay import qrcode
+        payload = qrcode.generate_payload(promptpay_number, amount=amount)
+        qr = qrcode.to_image(payload)
+
+        buffer = BytesIO()
+        qr.save(buffer, format="PNG")
+        qr_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+        return render(request, 'payment_qr.html', {
+            'order': order,
+            'qr_base64': qr_base64,
+            'amount': amount
+        })
+    except Exception as e:
+        return render(request, 'error.html', {'error': str(e)})
+
+    
+
+@login_required
+def order_status_view(request):
+    # ดึงคำสั่งซื้อทั้งหมดของผู้ใช้ โดยเรียงลำดับจากคำสั่งซื้อล่าสุด
+    orders = Order.objects.filter(user=request.user).order_by('-id')
+
+    # เตรียมข้อมูลรวมกับ shipping status
+    order_status_list = []
+    for order in orders:
+        try:
+            shipping = Shipping.objects.get(order=order)
+        except Shipping.DoesNotExist:
+            shipping = None
+
+        order_status_list.append({
+            'order': order,
+            'shipping': shipping,
+        })
+
+    return render(request, 'order_status.html', {'order_status_list': order_status_list})
+
+
+@login_required
+@transaction.atomic
+def order_delete_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    # ตรวจสอบสถานะก่อนลบ (ตัวอย่างลบได้เฉพาะสถานะ 'Pending' เท่านั้น)
+    if order.status.lower() != 'pending':
+        messages.error(request, "ไม่สามารถลบคำสั่งซื้อที่ดำเนินการไปแล้วได้")
+        return redirect('order_status')
+
+    # ลบข้อมูลที่เกี่ยวข้องก่อน (ถ้ามี)
+    order.delete()
+
+    messages.success(request, f"ลบคำสั่งซื้อ #{order_id} สำเร็จ")
+    return redirect('order_status')
+
+def contact_view(request):
+    return render(request, 'contact.html')

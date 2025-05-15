@@ -4,3 +4,7 @@ psycopg2-binary
 pillow
 python-dotenv
 social-auth-app-django
+segno
+crcmod>=1.7
+promptpay
+qrcode
