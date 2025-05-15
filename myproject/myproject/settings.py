@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app1',
-    'social_django'
+    'social_django',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

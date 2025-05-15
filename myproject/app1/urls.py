@@ -1,8 +1,14 @@
 from django.urls import path, include
 from . import views
-from .views import ProductListView, ProductDetailView, cart_view, CustomLoginView, add_product_view, payment_qr_view, order_status_view, order_delete_view, contact_view
-from django.contrib.auth import views as auth_views
 
+from .views import ProductListView, ProductDetailView, cart_view, CustomLoginView,add_product_view, payment_qr_view, order_status_view, order_delete_view, contact_view, ProductViewSet
+
+from django.contrib.auth import views as auth_views
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register(r'products', ProductViewSet)
 
 urlpatterns = [
     path('', views.homepage_view, name='homepage'),
@@ -22,5 +28,7 @@ urlpatterns = [
     path('payment_qr/', payment_qr_view, name='payment_qr'),
     path('order_status/', order_status_view, name='order_status'),
     path('order_delete/<int:order_id>/', order_delete_view, name='order_delete'),
-    path('contact/', views.contact_view, name='contact')
+    path('contact/', views.contact_view, name='contact'),
+    path('api/', include(router.urls)),
+    
 ]

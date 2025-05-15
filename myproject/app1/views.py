@@ -17,7 +17,8 @@ from .forms import ProductForm
 from io import BytesIO
 import base64
 from .utils.promptpay import generate_promptpay_payload
-
+from rest_framework import viewsets
+from .serializers import ProductSerializer
 
 
 def homepage_view(request):
@@ -42,6 +43,13 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
+
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
 
 
 @login_required
@@ -127,6 +135,9 @@ class CustomLoginView(LoginView):
 
         return redirect(next_url)
     
+    
+    
+    
 def signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -136,6 +147,9 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+
+
 
 @login_required
 @transaction.atomic
