@@ -14,7 +14,10 @@
       </div>
     {% endif %}
 
-    <form method="POST" id="checkout-form">
+    <form method="POST" id="checkout-form"
+          data-default-full-name="{{ full_name|escapejs }}"
+          data-default-phone-number="{{ phone_number|escapejs }}"
+          data-default-address="{{ address|escapejs }}">
       {% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
@@ -35,20 +38,20 @@
 
           <label for="full_name" class="block text-sm font-medium text-emerald-200 mb-1">Full Name</label>
           <input type="text" name="full_name" id="full_name"
-                 value="{{ full_name|default_if_none:'' }}"
+                 value="{{ full_name|default:'' }}"
                  class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                 placeholder="Your full name" />
+                 placeholder="{{ full_name|default:'Your full name' }}" />
 
           <label for="address" class="block text-sm font-medium text-emerald-200 mt-5 mb-1">Address</label>
           <textarea name="address" id="address"
                     class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Your shipping address">{{ address|default_if_none:'' }}</textarea>
+                    placeholder="Your shipping address">{{ address|default:'' }}</textarea>
 
           <label for="phone_number" class="block text-sm font-medium text-emerald-200 mt-5 mb-1">Phone Number</label>
           <input type="text" name="phone_number" id="phone_number"
-                 value="{{ phone_number|default_if_none:'' }}"
+                 value="{{ phone_number|default:'' }}"
                  class="w-full p-3 bg-white/90 text-green-900 placeholder:text-green-700 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                 placeholder="Your phone number" />
+                 placeholder="{{ phone_number|default:'Your phone number' }}" />
         </div>
 
         <!-- Cart Summary -->
@@ -84,29 +87,59 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('checkout-form');
     const selectedAddress = document.getElementById('selected_address');
     const fullName = document.getElementById('full_name');
     const address = document.getElementById('address');
     const phoneNumber = document.getElementById('phone_number');
 
-    function toggleFields() {
-      if (selectedAddress.value) {
-        // ถ้าเลือกที่อยู่จากโปรไฟล์ > disable กรอกใหม่
+    // ดึงค่า default จาก data attributes ที่ส่งมาจาก backend
+    const defaultFullName = form.dataset.defaultFullName || '';
+    const defaultPhoneNumber = form.dataset.defaultPhoneNumber || '';
+    const defaultAddress = form.dataset.defaultAddress || '';
+
+    // เตรียมข้อมูลที่อยู่จาก backend
+    const addresses = {
+      {% for addr in addresses %}
+      "{{ addr.id }}": {
+        full_name: "{{ addr.full_name|escapejs }}",
+        address: ("{{ addr.address_line1 }} {{ addr.address_line2 }}, {{ addr.city }}, {{ addr.state }}, {{ addr.postal_code }}, {{ addr.country }}").trim(),
+        phone_number: "{{ addr.phone_number|default_if_none:''|escapejs }}"
+      },
+      {% endfor %}
+    };
+
+    // ฟังก์ชันเติมข้อมูลในฟิลด์ต่าง ๆ ตาม selected address
+    function fillFields(selectedId) {
+      if (selectedId && addresses[selectedId]) {
+        fullName.value = addresses[selectedId].full_name;
+        address.value = addresses[selectedId].address;
+        phoneNumber.value = addresses[selectedId].phone_number;
+
+        // ปิดการแก้ไขถ้าเลือกที่อยู่ที่บันทึกไว้
         fullName.disabled = true;
         address.disabled = true;
         phoneNumber.disabled = true;
       } else {
-        // ถ้าเลือกกรอกใหม่ > enable
+        // กรณีกรอกที่อยู่ใหม่ ให้เติมชื่อและเบอร์จาก profile และเปิดให้แก้ไขได้
+        fullName.value = defaultFullName;
+        address.value = defaultAddress;
+        phoneNumber.value = defaultPhoneNumber;
+
         fullName.disabled = false;
         address.disabled = false;
         phoneNumber.disabled = false;
       }
     }
 
-    selectedAddress.addEventListener('change', toggleFields);
+    // เรียกฟังก์ชันเติมข้อมูลตอนโหลดหน้า
+    fillFields(selectedAddress.value);
 
-    // เรียกครั้งแรกตอนโหลดหน้า
-    toggleFields();
+    // อัพเดตฟิลด์เมื่อเปลี่ยนที่อยู่ใน dropdown
+    selectedAddress.addEventListener('change', function () {
+      fillFields(this.value);
+    });
   });
 </script>
+
 {% endblock %}

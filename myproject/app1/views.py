@@ -161,51 +161,52 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cart, Order, Shipping, Payment, Address
-
 @login_required
 @transaction.atomic
 def checkout_view(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-
-    # ดึงที่อยู่ของ user จาก Address model
     addresses = Address.objects.filter(user=request.user)
 
+    userprofile = request.user.userprofile
+    default_full_name = f"{userprofile.first_name} {userprofile.last_name}".strip()
+    default_phone = userprofile.phone_number.strip() if userprofile.phone_number else ''
+
     if request.method == 'POST':
-        selected_address_id = request.POST.get('selected_address')  # จาก dropdown เลือกที่อยู่
+        selected_address_id = request.POST.get('selected_address', '').strip()
         full_name = request.POST.get('full_name', '').strip()
         address = request.POST.get('address', '').strip()
         phone_number = request.POST.get('phone_number', '').strip()
 
         if selected_address_id:
-            # กรณีเลือกที่อยู่จากโปรไฟล์
+            # เลือกที่อยู่จากรายการ
             selected_address = get_object_or_404(Address, pk=selected_address_id, user=request.user)
-            full_name = f"{request.user.userprofile.first_name} {request.user.userprofile.last_name}"  # หรือจะเก็บใน Address ก็ได้
-            address = f"{selected_address.address_line1} {selected_address.address_line2}, {selected_address.city}, {selected_address.state}, {selected_address.postal_code}, {selected_address.country}"
-            phone_number = request.user.userprofile.phone_number
+            full_name = default_full_name
+            address = f"{selected_address.address_line1} {selected_address.address_line2}, {selected_address.city}, {selected_address.state}, {selected_address.postal_code}, {selected_address.country}".strip()
+            phone_number = default_phone
         else:
-            # กรณีกรอกที่อยู่ใหม่ ต้องมั่นใจว่า full_name, address, phone_number ไม่ว่าง
+            # ตรวจสอบว่ากรอกครบหรือไม่
             if not full_name or not address or not phone_number:
-                # ส่ง error กลับไปยังฟอร์ม (ทำเพิ่มเองได้)
                 context = {
                     'cart_items': cart_items,
                     'total_price': total_price,
                     'addresses': addresses,
                     'error': 'กรุณากรอกข้อมูลที่อยู่ให้ครบ หรือเลือกที่อยู่จากรายการ',
-                    'full_name': full_name,
+                    'full_name': full_name or default_full_name,
                     'address': address,
-                    'phone_number': phone_number,
+                    'phone_number': phone_number or default_phone,
+                    'selected_address': '',  # ไม่มีการเลือกที่อยู่
                 }
                 return render(request, 'checkout.html', context)
 
-        # 1. สร้างคำสั่งซื้อ
+        # สร้างคำสั่งซื้อ
         order = Order.objects.create(
             user=request.user,
             status='Pending',
             total_price=total_price
         )
 
-        # 2. เพิ่มที่อยู่จัดส่ง
+        # สร้างข้อมูลที่อยู่จัดส่ง
         Shipping.objects.create(
             order=order,
             full_name=full_name,
@@ -213,24 +214,30 @@ def checkout_view(request):
             phone_number=phone_number
         )
 
-        # 3. เพิ่มการชำระเงินแบบ mock (คุณสามารถเปลี่ยนเป็นระบบจริงได้ภายหลัง)
+        # ชำระเงิน mock
         Payment.objects.create(
             order=order,
-            method='COD',  # Cash on Delivery
+            method='COD',
             status='Pending'
         )
 
-        # 4. ล้างตะกร้า
+        # ล้างตะกร้า
         cart_items.delete()
 
-        return redirect('payment_qr')  # ไปหน้า success หลังสั่งซื้อ
+        return redirect('payment_qr')
 
-    # GET method
-    return render(request, 'checkout.html', {
+    # GET method – เตรียมค่าจากโปรไฟล์
+    context = {
         'cart_items': cart_items,
         'total_price': total_price,
         'addresses': addresses,
-    })
+        'full_name': default_full_name,
+        'phone_number': default_phone,
+        'address': '',  # กรอกใหม่เท่านั้น
+        'selected_address': '',  # ไม่มีการเลือกที่อยู่เริ่มต้น
+    }
+    return render(request, 'checkout.html', context)
+
 
 
 def order_success(request):
@@ -365,25 +372,27 @@ class LatestOrderStatusView(APIView):
         
 
 
+from django.contrib import messages
+
 @login_required
 def profile_view(request):
-    # get or create profile
     profile, created = UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            messages.success(request, "Your profile has been updated successfully.")
+            return redirect('profile')  # stay on same page
     else:
         form = UserProfileForm(instance=profile)
 
     addresses = Address.objects.filter(user=request.user)
-
     return render(request, 'profile.html', {
         'form': form,
         'addresses': addresses,
     })
+
 
 @login_required
 def address_add(request):
