@@ -2,7 +2,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
-from .models import Cart, Order, Shipping, Payment, Product, Seller, UserProfile, Address
+from .models import Cart, Order, Shipping, Payment, Product, Seller, UserProfile, Address, OrderItem
 from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -161,101 +161,121 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cart, Order, Shipping, Payment, Address
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Cart, Address, Order, Shipping, Payment, UserProfile
+
 @login_required
 @transaction.atomic
 def checkout_view(request):
-    cart_items = Cart.objects.filter(user=request.user)
+    user = request.user
+    cart_items = Cart.objects.filter(user=user)
+    addresses = Address.objects.filter(user=user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-    addresses = Address.objects.filter(user=request.user)
 
-    userprofile = request.user.userprofile
-    default_full_name = f"{userprofile.first_name} {userprofile.last_name}".strip()
-    default_phone = userprofile.phone_number.strip() if userprofile.phone_number else ''
+    userprofile, _ = UserProfile.objects.get_or_create(user=user)
+    full_name_default = f"{userprofile.first_name} {userprofile.last_name}".strip() or user.get_full_name()
+    phone_default = userprofile.phone_number.strip() if userprofile.phone_number else ''
 
     if request.method == 'POST':
         selected_address_id = request.POST.get('selected_address', '').strip()
         full_name = request.POST.get('full_name', '').strip()
-        address = request.POST.get('address', '').strip()
+        address_text = request.POST.get('address', '').strip()
         phone_number = request.POST.get('phone_number', '').strip()
 
         if selected_address_id:
-            # เลือกที่อยู่จากรายการ
-            selected_address = get_object_or_404(Address, pk=selected_address_id, user=request.user)
-            full_name = default_full_name
-            address = f"{selected_address.address_line1} {selected_address.address_line2}, {selected_address.city}, {selected_address.state}, {selected_address.postal_code}, {selected_address.country}".strip()
-            phone_number = default_phone
+            selected_address = get_object_or_404(Address, id=selected_address_id, user=user)
+            full_name = full_name_default
+            address_text = f"{selected_address.address_line1} {selected_address.address_line2}, {selected_address.city}, {selected_address.state}, {selected_address.postal_code}, {selected_address.country}".strip()
+            phone_number = phone_default
         else:
-            # ตรวจสอบว่ากรอกครบหรือไม่
-            if not full_name or not address or not phone_number:
-                context = {
+            if not all([full_name, address_text, phone_number]):
+                return render(request, 'checkout.html', {
                     'cart_items': cart_items,
                     'total_price': total_price,
                     'addresses': addresses,
-                    'error': 'กรุณากรอกข้อมูลที่อยู่ให้ครบ หรือเลือกที่อยู่จากรายการ',
-                    'full_name': full_name or default_full_name,
-                    'address': address,
-                    'phone_number': phone_number or default_phone,
-                    'selected_address': '',  # ไม่มีการเลือกที่อยู่
-                }
-                return render(request, 'checkout.html', context)
+                    'full_name': full_name or full_name_default,
+                    'address': address_text,
+                    'phone_number': phone_number or phone_default,
+                    'error': 'กรุณากรอกข้อมูลให้ครบถ้วน หรือเลือกที่อยู่จากรายการ',
+                    'selected_address': '',
+                })
 
-        # สร้างคำสั่งซื้อ
+        # Create Order
         order = Order.objects.create(
-            user=request.user,
+            user=user,
             status='Pending',
             total_price=total_price
         )
 
-        # สร้างข้อมูลที่อยู่จัดส่ง
+        # **เพิ่ม: สร้าง OrderItem จาก cart_items**
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price,
+            )
+
+        # Create Shipping Info
         Shipping.objects.create(
             order=order,
             full_name=full_name,
-            address=address,
+            address=address_text,
             phone_number=phone_number
         )
 
-        # ชำระเงิน mock
+        # Mock Payment
         Payment.objects.create(
             order=order,
             method='COD',
             status='Pending'
         )
 
-        # ล้างตะกร้า
+        # Clear Cart
         cart_items.delete()
 
         return redirect('payment_qr')
 
-    # GET method – เตรียมค่าจากโปรไฟล์
-    context = {
+    return render(request, 'checkout.html', {
         'cart_items': cart_items,
         'total_price': total_price,
         'addresses': addresses,
-        'full_name': default_full_name,
-        'phone_number': default_phone,
-        'address': '',  # กรอกใหม่เท่านั้น
-        'selected_address': '',  # ไม่มีการเลือกที่อยู่เริ่มต้น
-    }
-    return render(request, 'checkout.html', context)
+        'full_name': full_name_default,
+        'phone_number': phone_default,
+        'address': '',
+        'selected_address': '',
+    })
+
 
 
 
 def order_success(request):
-    # ดึงข้อมูลคำสั่งซื้อที่สำเร็จล่าสุดของผู้ใช้
+    # ดึงคำสั่งซื้อที่สำเร็จล่าสุดของผู้ใช้
     order = Order.objects.filter(user=request.user).latest('id')
     
     # ดึงข้อมูลการจัดส่งที่เชื่อมโยงกับคำสั่งซื้อ
     shipping_info = Shipping.objects.get(order=order)
 
-    # ดึงข้อมูลตะกร้าจาก session
-    cart_items_from_session = request.session.get('cart_data', [])
+    # ดึงรายการสินค้าในคำสั่งซื้อจากฐานข้อมูล
+    order_items = order.items.select_related('product').all()
 
-    # ส่งข้อมูลไปยัง template
+    # เตรียมข้อมูลสำหรับส่งไปยัง template
+    cart_items = []
+    for item in order_items:
+        cart_items.append({
+            'product_name': item.product.name,
+            'quantity': item.quantity,
+            'price': item.price,
+        })
+
     return render(request, 'order_success.html', {
         'shipping_info': shipping_info,
-        'cart_items': cart_items_from_session,  # แสดงข้อมูลจาก session
-        'total_price': order.total_price  # ใช้ราคาที่เก็บในคำสั่งซื้อ
+        'cart_items': cart_items,
+        'total_price': order.total_price,
     })
+
 
 @login_required
 def payment_qr_view(request):
